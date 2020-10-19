@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2019",
+    "moduleResolution": "node",
+    "lib": ["DOM", "ES2020"],
+    "outDir": "./dist/",
+    "strict": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "$schema": "https://json.schemastore.org/tsconfig"
+}
