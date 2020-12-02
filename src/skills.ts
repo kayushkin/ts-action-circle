@@ -17,3 +17,10 @@ export let circleManSkillCDMap: {[key: string]: CDinfo} = {
       timeLeft: 0
     }
   }
+
+export const isOnCD = (ability: CDinfo): boolean => {
+  if(ability.timeLeft > 0) {
+    return true
+  }
+  return false
+}
