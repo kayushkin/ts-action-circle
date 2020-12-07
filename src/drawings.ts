@@ -1,4 +1,4 @@
-import { Circle } from './circles'
+import { Circle, circleMan, badGuys, bullets } from './circles'
 
 export let canvas = document.createElement('canvas')
 
@@ -25,4 +25,16 @@ export const drawCircle = (circle: Circle) => {
   ctx.arc(circle.posn.x, circle.posn.y, circle.radius, 0, 2 * Math.PI)
   ctx.closePath()
   ctx.fill()
+}
+
+export const render = () => {
+  if (ctx === null) return
+
+  // clear screen
+  ctx.fillStyle = 'gray' 
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  drawCircle(circleMan)
+  badGuys.forEach(drawCircle)
+  bullets.forEach(drawCircle)
 }

@@ -5,7 +5,7 @@ export interface CDinfo {
 
 export let circleManSkillCDMap: {[key: string]: CDinfo} = {
     "dash": {
-      cd: 800,
+      cd: 1750,
       timeLeft: 0
     },
     "basic fire": {
@@ -13,9 +13,13 @@ export let circleManSkillCDMap: {[key: string]: CDinfo} = {
       timeLeft: 0
     },
     "orange fire": {
-      cd: 1500,
+      cd: 5000,
       timeLeft: 0
-    }
+    },
+    "grab": {
+      cd: 5000,
+      timeLeft: 0
+    },
   }
 
 export const isOnCD = (ability: CDinfo): boolean => {

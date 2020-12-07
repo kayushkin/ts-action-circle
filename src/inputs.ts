@@ -1,4 +1,6 @@
 import { Vec2D } from './vecs'
+import { isClickingOnBadGuy } from './detection'
+import { BadGuy } from './circles'
 
 export let keys = {
   up: false,
@@ -8,11 +10,13 @@ export let keys = {
   fire: false,
   shiftLeft: false,
   keyG: false,
+  keyR: false,
 }
   
 export let mousePosition: Vec2D = {x: 200, y: 200}
 
 window.addEventListener('keydown', evt => {
+  //console.log(evt.code)
   window.addEventListener('mousemove', onMouseMove)
   switch (evt.code) {
     case 'KeyE':
@@ -33,15 +37,12 @@ window.addEventListener('keydown', evt => {
     case 'KeyG':
       keys.keyG = true
       break
+    case 'KeyR':
+      keys.keyR = true
+    break
   }
 })
-  
-  
-export const logKey = (e: any) => {
-  console.log(e.code)
-}
-document.addEventListener('keydown', logKey);
-  
+
 export const onMouseMove = (evt: MouseEvent) => {
   mousePosition = {x: evt.pageX, y: evt.pageY}
 }
@@ -78,5 +79,8 @@ window.addEventListener('keyup', evt => {
     case 'KeyG':
       keys.keyG = false
       break
+    case 'KeyR':
+      keys.keyR = false
+    break
   }
 })

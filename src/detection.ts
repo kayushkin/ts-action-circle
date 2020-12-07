@@ -1,6 +1,7 @@
-import { Circle } from "./circles"
+import { badGuys, Circle } from "./circles"
 import { magnitude, subtractVec2D } from "./vecs"
 import { canvas } from "./drawings"
+import { mousePosition } from "./inputs"
 
 export const isCollision = (circle1: Circle, circle2: Circle) => {
     let differenceVec = subtractVec2D(circle1.posn, circle2.posn)
@@ -16,3 +17,17 @@ export const isOob = (circle: Circle) => {
   let distanceToBottom = canvas.height + circle.radius
   return x < -circle.radius || x > distanceToRight || y < -circle.radius || y > distanceToBottom
 }
+
+export const isClickingOnBadGuy = () => {
+  let result = false
+  badGuys.forEach(badGuy => {
+    let distanceToBadGuy = magnitude(subtractVec2D(mousePosition, badGuy.posn))
+    if(distanceToBadGuy < badGuy.radius) {
+      badGuyLastClicked = badGuy.id
+      result = true
+    }
+  })
+  return result
+}
+
+export let badGuyLastClicked = 0

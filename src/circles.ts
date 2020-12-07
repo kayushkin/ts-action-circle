@@ -6,11 +6,15 @@ export interface Posn {
     y: number
 }
 
+export interface Id {
+  id: number
+}
+
 export type Bullet = Circle & {
     movement: Move
     name: string
 }
-export type BadGuy = CircleMan & AutoMove
+export type BadGuy = CircleMan & AutoMove & Id
 export type CircleMan = Circle & Fighter
 export type Fighter = Circle & {
     hp: number
@@ -55,6 +59,7 @@ export let orangeBullet: Bullet = {
   }
   
 export let greenBadGuy1: BadGuy = {
+    id: 1,
     posn: { x: 200, y: 200 }, 
     radius: 50, 
     color: 'green', 
@@ -65,6 +70,7 @@ export let greenBadGuy1: BadGuy = {
     cDs: circleManSkillCDMap
   }
 export let greenBadGuy2: BadGuy = {
+    id: 2,
     posn: { x: 200, y: 400 }, 
     radius: 50, 
     color: 'green', 
@@ -75,6 +81,7 @@ export let greenBadGuy2: BadGuy = {
     cDs: circleManSkillCDMap
   }
 export let greenBadGuy3: BadGuy = {
+    id: 3,
     posn: { x: 400, y: 250 }, 
     radius: 50, 
     color: 'green', 

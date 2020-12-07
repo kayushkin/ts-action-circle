@@ -1,8 +1,8 @@
-import { Fighter, circleMan, bullets, badGuys, orangeBullet, bullet } from "./circles"
+import { Fighter, circleMan, bullets, badGuys, orangeBullet, bullet, BadGuy } from "./circles"
 import { keys, mousePosition } from "./inputs"
 import { scale, addVec2D, normalize, reverseVec2D, subtractVec2D, } from "./vecs"
 import { Move, moves } from "./movement"
-import { isOob, isCollision } from "./detection"
+import { isOob, isCollision, isClickingOnBadGuy } from "./detection"
 import { isOnCD } from "./skills"
 
 export let lastShot = Date.now()
@@ -70,7 +70,7 @@ export const firingUpdate = () => {
   if (keys.keyG && (!isOnCD(circleMan.cDs["orange fire"]))) {
     circleMan.cDs["orange fire"].timeLeft = circleMan.cDs["orange fire"].cd
     let bulletMove = { ...moves["orangeBulletMove"]}
-    let currentBullet = {...orangeBullet}
+    let currentBullet = { ...orangeBullet}
     currentBullet.posn = circleMan.posn
     currentBullet.movement = bulletMove
     currentBullet.movement.direction = normalizedFiringVector
@@ -95,47 +95,66 @@ export const bulletsPosnUpdate = (dt: number) => {
   })
 }
 
-export const badGuysUpdate = (dt: number) => {
+const badGuysUpdate = (dt: number) => {
   badGuys.forEach((badGuy, badGuyIdx) => {
-    badGuys.forEach((badGuyInner, badGuyIdx2) => {
-      if (badGuyIdx == badGuyIdx2) {
-        return
-      } else if (isCollision(badGuy, badGuyInner)) {
-        let pushObj = { ...moves["pushObj"]}
-        pushObj.direction = normalize(subtractVec2D(badGuy.posn, badGuyInner.posn))
-        moveUpdate(badGuy, pushObj)
-        let reversePushObj = {...pushObj}
-        reversePushObj.direction = reverseVec2D(reversePushObj.direction)
-        moveUpdate(badGuyInner, reversePushObj)
-      }
-    })
-    if (isOob(badGuy)) {
-      badGuys.splice(badGuyIdx, 1)
-    } else if (isCollision(badGuy, circleMan)) {
-      let pushObj = { ...moves["pushObj"]}
-      pushObj.direction = normalize(subtractVec2D(badGuy.posn, circleMan.posn))
-      badGuy.movement = pushObj
-    } else {
-    bullets.forEach((bullet, bulletIdx) => {
-      if (isCollision(badGuy, bullet)) {
-        if (bullet.name == "basic fire") {
-          bullets.splice(bulletIdx, 1)
-          badGuy.hp -= 1
-        }
-        let bulletKB = { ...moves["bulletKB"]}
-        bulletKB.direction = normalize(subtractVec2D(badGuy.posn, bullet.posn))
-        moveUpdate(badGuy, bulletKB)
-        if (badGuy.hp < 1) {
-          badGuys.splice(badGuyIdx, 1)
-        }
-      }
-    })}
+    badGuysCollisionDetection(badGuy, badGuyIdx)
+    badGuysCleanup(badGuy, badGuyIdx)
   })
+}
+
+const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
+  badGuys.forEach((badGuyInner, badGuyIdx2) => {
+    if (badGuyIdx == badGuyIdx2) {
+      return
+    } else if (isCollision(badGuy, badGuyInner)) {
+      let pushObj = { ...moves["pushObj"]}
+      pushObj.direction = normalize(subtractVec2D(badGuy.posn, badGuyInner.posn))
+      moveUpdate(badGuy, pushObj)
+      let reversePushObj = {...pushObj}
+      reversePushObj.direction = reverseVec2D(reversePushObj.direction)
+      moveUpdate(badGuyInner, reversePushObj)
+    }
+  })
+  if (isCollision(badGuy, circleMan)) {
+    let pushObj = { ...moves["pushObj"]}
+    pushObj.direction = normalize(subtractVec2D(badGuy.posn, circleMan.posn))
+    badGuy.movement = pushObj
+  } 
+}
+
+const grabPosnUpdate = (badGuy: BadGuy) => {
+  if (keys.keyR && (!isOnCD(circleMan.cDs["grab"])) && isClickingOnBadGuy()) {
+    circleMan.cDs["grab"].timeLeft = circleMan.cDs["grab"].cd
+    let grabObj = { ...moves["grabMove"]}
+    grabObj.direction = normalize(subtractVec2D(badGuy.posn, circleMan.posn))
+    moveUpdate(badGuy, grabObj)
+  }
+}
+
+export const badGuysCleanup = (badGuy: BadGuy, badGuyIdx: number) => {
+  bullets.forEach((bullet, bulletIdx) => {
+    if (isCollision(badGuy, bullet)) {
+      if (bullet.name == "basic fire") {
+        bullets.splice(bulletIdx, 1)
+        badGuy.hp -= 1
+      }
+      let bulletKB = { ...moves["bulletKB"]}
+      bulletKB.direction = normalize(subtractVec2D(badGuy.posn, bullet.posn))
+      moveUpdate(badGuy, bulletKB)
+      if (badGuy.hp < 1) {
+        badGuys.splice(badGuyIdx, 1)
+      }
+    }
+  })
+  if (isOob(badGuy)) {
+    badGuys.splice(badGuyIdx, 1)
+  }
 }
 
 export const badGuysPosnUpdate = (dt: number) => {
   badGuys.forEach(badGuy => {
     circleMoveToPosnUpdate(badGuy, dt)
+    grabPosnUpdate(badGuy)
   })
 }
 
@@ -148,4 +167,12 @@ export const circlesPosnUpdate = (dt: number) => {
   circleMoveToPosnUpdate(circleMan, dt)
   bulletsPosnUpdate(dt)
   badGuysPosnUpdate(dt)
+}
+
+export const update = (dt: number) => {
+  circleManMoveUpdate()
+  firingUpdate()
+  badGuysUpdate(dt)
+  cDsUpdate(dt)
+  circlesPosnUpdate(dt)
 }
