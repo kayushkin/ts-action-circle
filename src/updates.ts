@@ -126,7 +126,7 @@ const grabPosnUpdate = (badGuy: BadGuy) => {
   if (keys.keyR && (!isOnCD(circleMan.cDs["grab"])) && isClickingOnBadGuy()) {
     circleMan.cDs["grab"].timeLeft = circleMan.cDs["grab"].cd
     let grabObj = { ...moves["grabMove"]}
-    grabObj.direction = normalize(subtractVec2D(badGuy.posn, circleMan.posn))
+    grabObj.direction = normalize(subtractVec2D(circleMan.posn, badGuy.posn))
     moveUpdate(badGuy, grabObj)
   }
 }

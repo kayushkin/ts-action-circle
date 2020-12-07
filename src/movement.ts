@@ -61,5 +61,12 @@ export let moves: {[key: string]: Move} = {
       speed: 1.5,
       direction: {x:0, y:0},
       time: 5000
+    },
+    "grabMove": {
+      name: "grabMove",
+      priority: 2,
+      speed: 5,
+      direction: {x:0, y:0},
+      time: 5000
     }
   }
