@@ -27,7 +27,7 @@ export let moves: {[key: string]: Move} = {
       direction: {x:0, y:0},
       time: 0
     },
-    "bulletMove": {
+    "basic fire": {
       name: "bullet move",
       priority: 10,
       direction: {x:0, y:0},
@@ -55,14 +55,14 @@ export let moves: {[key: string]: Move} = {
       direction: {x:0, y:0}, 
       time: 250
     },
-    "orangeBulletMove": {
+    "orange fire": {
       name: "orangeBulletMove",
       priority: 5,
       speed: 1.5,
       direction: {x:0, y:0},
       time: 5000
     },
-    "grabMove": {
+    "grab": {
       name: "grabMove",
       priority: 2,
       speed: 5,

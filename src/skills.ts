@@ -3,7 +3,7 @@ export interface CDinfo {
     timeLeft: number
 }
 
-export let circleManSkillCDMap: {[key: string]: CDinfo} = {
+export let skillsList: {[key: string]: CDinfo} = {
     "dash": {
       cd: 1750,
       timeLeft: 0
