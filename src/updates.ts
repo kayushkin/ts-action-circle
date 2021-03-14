@@ -196,5 +196,3 @@ export const update = (dt: number) => {
   cleanup()
   circlesMove(dt)
 }
-
-//test
