@@ -1,5 +1,5 @@
 import { Move, AutoMove, moves } from "./movement"
-import { CDinfo, _skills } from "./skills"
+import { CDinfo, _skills, SkillName } from "./skills"
 
 export interface Posn {
     x: number
@@ -10,12 +10,17 @@ export interface Id {
   id: number
 }
 
+export interface Circle {
+    posn: Posn
+    radius: number
+    color: string
+}
+
 export type Bullet = Circle & {
     movement: Move
     name: string
 }
-export type BadGuy = Fighter & AutoMove & Id
-export type CircleMan = Fighter
+
 export type Fighter = Circle & {
     hp: number
     movement: Move
@@ -23,14 +28,12 @@ export type Fighter = Circle & {
     skills: {[key: string]: CDinfo}
 }
 
-export interface Circle {
-    posn: Posn
-    radius: number
-    color: string
-}
+export type BadGuy = Fighter & AutoMove & Id
+
+export type CircleMan = Fighter
 
 export let circleMan: CircleMan = {
-    posn: { x: 100, y: 100},
+    posn: { x: 100, y: 100 },
     radius: 50,
     color: 'blue',
     hp: 5,

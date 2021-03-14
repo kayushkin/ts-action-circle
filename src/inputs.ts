@@ -3,7 +3,7 @@ import { isClickingOnBadGuy } from './detection'
 import { BadGuy } from './circles'
 import { SkillName } from './skills'
 
-type Actions = {
+export type Actions = {
   up: boolean
   down: boolean
   left: boolean
