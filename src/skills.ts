@@ -3,28 +3,25 @@ export interface CDinfo {
     timeLeft: number
 }
 
-export let skillsList: {[key: string]: CDinfo} = {
-    "dash": {
+export type SkillName = keyof typeof _skills
+
+export const _skills: {[key: string]: CDinfo} = {
+    Dash: {
       cd: 1750,
       timeLeft: 0
     },
-    "basic fire": {
+    BasicFire: {
       cd: 300,
       timeLeft: 0
     },
-    "orange fire": {
+    OrangeFire: {
       cd: 5000,
       timeLeft: 0
     },
-    "grab": {
+    Grab: {
       cd: 5000,
       timeLeft: 0
     },
   }
 
-export const isOnCD = (ability: CDinfo): boolean => {
-  if(ability.timeLeft > 0) {
-    return true
-  }
-  return false
-}
+export const isOnCD = (ability: CDinfo): boolean => (ability.timeLeft > 0)

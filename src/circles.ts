@@ -1,5 +1,5 @@
 import { Move, AutoMove, moves } from "./movement"
-import { CDinfo, skillsList } from "./skills"
+import { CDinfo, _skills } from "./skills"
 
 export interface Posn {
     x: number
@@ -14,8 +14,8 @@ export type Bullet = Circle & {
     movement: Move
     name: string
 }
-export type BadGuy = CircleMan & AutoMove & Id
-export type CircleMan = Circle & Fighter
+export type BadGuy = Fighter & AutoMove & Id
+export type CircleMan = Fighter
 export type Fighter = Circle & {
     hp: number
     movement: Move
@@ -35,8 +35,8 @@ export let circleMan: CircleMan = {
     color: 'blue',
     hp: 5,
     movement: moves.notMoving,
-    spd: 2,
-    skills: skillsList
+    spd: 0.3,
+    skills: _skills
   }
   
 export let bullets: Bullet[] = [
@@ -63,33 +63,33 @@ export let greenBadGuy1: BadGuy = {
     posn: { x: 200, y: 200 }, 
     radius: 50, 
     color: 'green', 
-    spd: 1, 
+    spd: 0.125, 
     hp: 70, 
     movement: moves.notMoving,
     autoMove: moves.notMoving,
-    skills: skillsList
+    skills: _skills
   }
 export let greenBadGuy2: BadGuy = {
     id: 2,
     posn: { x: 200, y: 400 }, 
     radius: 50, 
     color: 'green', 
-    spd: 1, 
+    spd: 0.125, 
     hp: 70, 
     movement: moves.notMoving,
     autoMove: moves.notMoving,
-    skills: skillsList
+    skills: _skills
   }
 export let greenBadGuy3: BadGuy = {
     id: 3,
     posn: { x: 400, y: 250 }, 
     radius: 50, 
     color: 'green', 
-    spd: 1, 
+    spd: 0.125, 
     hp: 70, 
     movement: moves.notMoving,
     autoMove: moves.notMoving,
-    skills: skillsList
+    skills: _skills
   }
   
 export let badGuys: BadGuy[] = [

@@ -25,28 +25,28 @@ export let moves: {[key: string]: Move} = {
       priority: 10,
       speed: 1,
       direction: {x:0, y:0},
-      time: 0
+      time: 1000
     },
     "basic fire": {
       name: "bullet move",
       priority: 10,
       direction: {x:0, y:0},
-      speed: 3,
-      time: 10000
+      speed: 1.1,
+      time: 100
    },
    "pushObj": {
       name: "collision",
       priority: 5,
-      speed: 5,
+      speed: 1,
       direction: {x:0, y:0},
-      time:1
+      time:5
    },
    "bulletKB": {
     name: "bulletKB", 
     priority: 2,
     speed: 2,  
     direction: {x:0, y:0}, 
-    time: 5
+    time: 1
     },
     "dash": {
       name: "dash", 
@@ -58,7 +58,7 @@ export let moves: {[key: string]: Move} = {
     "orange fire": {
       name: "orangeBulletMove",
       priority: 5,
-      speed: 1.5,
+      speed: 0.5,
       direction: {x:0, y:0},
       time: 5000
     },

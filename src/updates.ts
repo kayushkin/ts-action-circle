@@ -1,9 +1,9 @@
 import { Fighter, circleMan, bullets, badGuys, orangeBullet, bullet, BadGuy } from "./circles"
-import { keys, mousePosition } from "./inputs"
+import { actions, mousePosition } from "./inputs"
 import { scale, addVec2D, normalize, reverseVec2D, subtractVec2D, } from "./vecs"
 import { Move, moves } from "./movement"
 import { isOob, isCollision, isClickingOnBadGuy, badGuyLastClicked } from "./detection"
-import { isOnCD, skillsList } from "./skills"
+import { isOnCD, SkillName, _skills } from "./skills"
 import { cloneObject } from "./util"
 
 let lastShot = Date.now()
@@ -16,7 +16,8 @@ const queueMove = (fighter: Fighter, attemptedMove: Move) => {
 
 const circleMove = (circleWithMove: any, dt: number) => {
   if (circleWithMove.movement.time >= 0 ){
-    let dcircleWithMovePosn = scale(circleWithMove.movement.direction, circleWithMove.movement.speed)
+    let adjustedSpeed = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
+    let dcircleWithMovePosn = scale(circleWithMove.movement.direction, adjustedSpeed)
     circleWithMove.posn = addVec2D(circleWithMove.posn, dcircleWithMovePosn)
     circleWithMove.movement.time -= dt
   }
@@ -33,30 +34,24 @@ const cDsUpdate = (dt: number) => {
   })
 }
 
-const isSkillActivating = (skillName: String): boolean => {
+const isSkillActivating = (skillName: SkillName): boolean => {
   switch (skillName) {
-    case "basic fire": {
-      return keys.fire && (!isOnCD(circleMan.skills["basic fire"]))
-    }
-    case "orange fire":{
-      return keys.keyG && (!isOnCD(circleMan.skills["orange fire"]))
-    }
-    case "dash":{
-      return keys.shiftLeft && !isOnCD(circleMan.skills["dash"])
-    }
-    case "grab":{
-      return keys.keyR && (!isOnCD(circleMan.skills["grab"])) && isClickingOnBadGuy()
-    }
+    case ('Grab'):
+      if (actions.Grab) console.log('actions.grab is ' + actions.Grab)
+      if (!isOnCD(circleMan.skills.Grab)) console.log( ('isOnCD is ' + !isOnCD(circleMan.skills.Grab)))
+      //console.log('isClickingOnBadGuy is ' + isClickingOnBadGuy())
+      return actions.Grab && (!isOnCD(circleMan.skills.Grab)) && isClickingOnBadGuy()
+    default:
+      return (actions.skillName && (!isOnCD(circleMan.skills.skillName)))
   }
-  return false
 }
 
 const arrowKeysQueueMove = () => {
   let dPosn = {x:0, y:0}
-  if (keys.up) dPosn.y -= 1
-  if (keys.down) dPosn.y += 1
-  if (keys.left) dPosn.x -= 1 
-  if (keys.right) dPosn.x += 1
+  if (actions.up) dPosn.y -= 1
+  if (actions.down) dPosn.y += 1
+  if (actions.left) dPosn.x -= 1 
+  if (actions.right) dPosn.x += 1
   dPosn = normalize(dPosn)
   let arrowKeyMove = cloneObject(moves["arrowKeyMove"])
   arrowKeyMove.direction = dPosn
@@ -65,14 +60,19 @@ const arrowKeysQueueMove = () => {
 }
 
 const skillQueueMove = () => {
-  Object.keys(skillsList).forEach( skill => {
+  orangePull()
+  Object.keys(_skills).forEach( skill => {
+    //console.log('_skills is' + _skills)
+    //console.log('skill is ' + skill)
     if (isSkillActivating(skill)) {
+      console.log("true skill active")
       circleMan.skills[skill].timeLeft = circleMan.skills[skill].cd
-      if (skill == "basic fire" || skill == "orange fire") {
+      if (skill == "BasicFire" || skill == "OrangeFire") {
+        console.log('hitting basic')
         let normalizedFiringVector = normalize(subtractVec2D(mousePosition, circleMan.posn))
         let bulletMove = cloneObject(moves[skill])
         let currentBullet = cloneObject(bullet)
-        if (skill == "orange fire") {
+        if (skill == "OrangeFire") {
           currentBullet = cloneObject(orangeBullet)
         }
         currentBullet.posn = circleMan.posn
@@ -121,29 +121,32 @@ const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
   } 
 }
 
-const badGuysCleanup = (badGuy: BadGuy, badGuyIdx: number) => {
-  bullets.forEach((bullet, bulletIdx) => {
-    if (isCollision(badGuy, bullet)) {
-      if (bullet.name == "basic fire") {
-        bullets.splice(bulletIdx, 1)
-        badGuy.hp -= 1
+const cleanup = () => {
+  badGuys.forEach( (badGuy, badGuyIdx) => {
+    bullets.forEach((bullet, bulletIdx) => {
+      if (isCollision(badGuy, bullet)) {
+        if (bullet.name == "basic fire") {
+          bullets.splice(bulletIdx, 1)
+          badGuy.hp -= 1
+        }
+        let bulletKB = cloneObject(moves["bulletKB"])
+        bulletKB.direction = normalize(subtractVec2D(badGuy.posn, bullet.posn))
+        queueMove(badGuy, bulletKB)
+        if (badGuy.hp < 1) {
+          badGuys.splice(badGuyIdx, 1)
+        }
       }
-      let bulletKB = cloneObject(moves["bulletKB"])
-      bulletKB.direction = normalize(subtractVec2D(badGuy.posn, bullet.posn))
-      queueMove(badGuy, bulletKB)
-      if (badGuy.hp < 1) {
-        badGuys.splice(badGuyIdx, 1)
-      }
+    })
+    if (isOob(badGuy)) {
+      badGuys.splice(badGuyIdx, 1)
     }
+
   })
-  if (isOob(badGuy)) {
-    badGuys.splice(badGuyIdx, 1)
-  }
 }
 
-const bulletKB = (skillName: String) => {
+const orangePull = () => {
   bullets.forEach((bullet) => {
-    if (bullet.name == skillName) {
+    if (bullet.name == "orange fire") {
       badGuys.forEach(badguy => {
         let pushToOrange = cloneObject(moves["pushObj"])
         pushToOrange.direction = normalize(subtractVec2D(bullet.posn, badguy.posn))
@@ -151,10 +154,6 @@ const bulletKB = (skillName: String) => {
       })
     }
   })
-}
-
-const orangeFire = () => {
-  bulletKB("orange fire")
 }
 
 const bulletsMoveToPosn = (dt: number) => {
@@ -170,13 +169,11 @@ const skillsUpdate = (dt: number) => {
   cDsUpdate(dt)
   skillQueueMove()
   arrowKeysQueueMove()
-  orangeFire()
 }
 
 const badGuysMove = (dt: number) => {
   badGuys.forEach((badGuy, badGuyIdx) => {
     badGuysCollisionDetection(badGuy, badGuyIdx)
-    badGuysCleanup(badGuy, badGuyIdx)
   })
 }
 
@@ -195,5 +192,6 @@ const circlesMove = (dt: number) => {
 export const update = (dt: number) => {
   badGuysMove(dt)
   skillsUpdate(dt)
+  cleanup()
   circlesMove(dt)
 }

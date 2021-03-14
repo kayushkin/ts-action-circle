@@ -1,5 +1,4 @@
-import { circleMan, badGuys, bullets } from "./circles"
-import { drawCircle, canvas, ctx, setupCanvas, render } from './drawings'
+import { setupCanvas, render } from './drawings'
 import { update } from "./updates"
 
 setupCanvas()

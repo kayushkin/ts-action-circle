@@ -1,16 +1,24 @@
 import { Vec2D } from './vecs'
 import { isClickingOnBadGuy } from './detection'
 import { BadGuy } from './circles'
+import { SkillName } from './skills'
 
-export let keys = {
+type Actions = {
+  up: boolean
+  down: boolean
+  left: boolean
+  right: boolean
+} & { [name in SkillName]: boolean}
+
+export let actions: Actions = {
   up: false,
   down: false,
   left: false,
   right: false,
-  fire: false,
-  shiftLeft: false,
-  keyG: false,
-  keyR: false,
+  BasicFire: false,
+  OrangeFire: false,
+  Dash: false,
+  Grab: false,
 }
   
 export let mousePosition: Vec2D = {x: 200, y: 200}
@@ -20,25 +28,25 @@ window.addEventListener('keydown', evt => {
   window.addEventListener('mousemove', onMouseMove)
   switch (evt.code) {
     case 'KeyE':
-      keys.up = true
+      actions.up = true
       break
     case 'KeyD':
-      keys.down = true
+      actions.down = true
       break
     case 'KeyS':
-      keys.left = true
+      actions.left = true
       break
     case 'KeyF':
-      keys.right = true
+      actions.right = true
       break
     case 'ShiftLeft':
-      keys.shiftLeft = true
+      actions.Dash = true
       break
     case 'KeyG':
-      keys.keyG = true
+      actions.OrangeFire = true
       break
     case 'KeyR':
-      keys.keyR = true
+      actions.Grab = true
     break
   }
 })
@@ -48,13 +56,13 @@ export const onMouseMove = (evt: MouseEvent) => {
 }
   
 window.addEventListener('mousedown', evt => {
-  keys.fire = true
+  actions.BasicFire = true
   mousePosition = {x: evt.pageX, y: evt.pageY}
   window.addEventListener('mousemove', onMouseMove)
 })
       
 window.addEventListener('mouseup', evt => {
-  keys.fire = false
+  actions.BasicFire = false
   window.removeEventListener('mousemove', onMouseMove)
 })
   
@@ -62,25 +70,25 @@ window.addEventListener('keyup', evt => {
   window.removeEventListener('mousemove', onMouseMove)
   switch (evt.code) {
     case 'KeyE':
-      keys.up = false
+      actions.up = false
       break
     case 'KeyD':
-      keys.down = false
+      actions.down = false
       break
     case 'KeyS':
-      keys.left = false
+      actions.left = false
       break
     case 'KeyF':
-      keys.right = false
+      actions.right = false
       break
     case 'ShiftLeft':
-      keys.shiftLeft = false
+      actions.Dash = false
       break
     case 'KeyG':
-      keys.keyG = false
+      actions.OrangeFire = false
       break
     case 'KeyR':
-      keys.keyR = false
+      actions.Grab = false
     break
   }
 })

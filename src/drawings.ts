@@ -6,19 +6,29 @@ export let ctx = canvas.getContext('2d')
 
 export const setupCanvas = () => {
   document.body.parentElement!.style.height = '100%'
-document.body.style.height = '100%'
-document.body.style.margin = '0'
+  document.body.style.height = '100%'
+  document.body.style.margin = '0'
 
-canvas.width = parseFloat(window.getComputedStyle(document.body).width)
-canvas.height = parseFloat(window.getComputedStyle(document.body).height)
-canvas.style.backgroundColor = 'gray'
-document.body.appendChild(canvas)
-
+  canvas.width = parseFloat(window.getComputedStyle(document.body).width)
+  canvas.height = parseFloat(window.getComputedStyle(document.body).height)
+  canvas.style.backgroundColor = 'gray'
+  document.body.appendChild(canvas)
 }
 
+let img = new Image();
+img.src = './assets/placeholder/placeholder_tokens.png';
 
 export const drawCircle = (circle: Circle) => {
   if (ctx === null) return
+
+  //var img = './assets/placeholder/placeholder_tokens.png'
+  //var img = document.createElement('img'); 
+  //img.src = './assets/placeholder/placeholder_tokens.png'; 
+  //document.body.appendChild(img);
+  //ctx.drawImage(img, 10, 10)
+
+  //ctx.drawImage(img, 10, 10);
+
 
   ctx.fillStyle = circle.color
   ctx.beginPath()
