@@ -25,7 +25,6 @@ export let mousePosition: Vec2D = {x: 200, y: 200}
 
 window.addEventListener('keydown', evt => {
   //console.log(evt.code)
-  window.addEventListener('mousemove', onMouseMove)
   switch (evt.code) {
     case 'KeyE':
       actions.up = true
@@ -58,16 +57,18 @@ export const onMouseMove = (evt: MouseEvent) => {
 window.addEventListener('mousedown', evt => {
   actions.BasicFire = true
   mousePosition = {x: evt.pageX, y: evt.pageY}
-  window.addEventListener('mousemove', onMouseMove)
+})
+
+
+window.addEventListener('mousemove', evt => {
+  mousePosition = {x: evt.pageX, y: evt.pageY}
 })
       
 window.addEventListener('mouseup', evt => {
   actions.BasicFire = false
-  window.removeEventListener('mousemove', onMouseMove)
 })
   
 window.addEventListener('keyup', evt => {
-  window.removeEventListener('mousemove', onMouseMove)
   switch (evt.code) {
     case 'KeyE':
       actions.up = false

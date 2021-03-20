@@ -9,5 +9,6 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true
   },
-  "$schema": "https://json.schemastore.org/tsconfig"
+  "$schema": "https://json.schemastore.org/tsconfig",
+  //"include": ["src", "index.d.ts"]
 }

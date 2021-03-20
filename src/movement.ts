@@ -11,62 +11,66 @@ export interface Move {
 export interface AutoMove {
     autoMove: Move
   }
+
+export type MoveName = keyof typeof _moves
   
-export let moves: {[key: string]: Move} = {
-    "notMoving": {
+let _moves: {[key: string]: Move} = {
+    NotMoving: {
       name: "not moving",
       priority: 10,
       speed: 0,
       direction: {x:0, y:0},
       time: 0
     },
-    "arrowKeyMove": {
+    ArrowKeyMove: {
       name: "arrow key move",
       priority: 10,
       speed: 1,
       direction: {x:0, y:0},
       time: 1000
     },
-    "basic fire": {
+    BasicFire: {
       name: "bullet move",
       priority: 10,
       direction: {x:0, y:0},
-      speed: 1.1,
-      time: 100
+      speed: 0.5,
+      time: 10000
    },
-   "pushObj": {
+   PushObj: {
       name: "collision",
       priority: 5,
       speed: 1,
       direction: {x:0, y:0},
       time:5
    },
-   "bulletKB": {
+   BulletKB: {
     name: "bulletKB", 
     priority: 2,
     speed: 2,  
     direction: {x:0, y:0}, 
     time: 1
     },
-    "dash": {
+    Dash: {
       name: "dash", 
       priority: 8,
-      speed: 5, 
+      speed: 1, 
       direction: {x:0, y:0}, 
       time: 250
     },
-    "orange fire": {
+    OrangeFire: {
       name: "orangeBulletMove",
       priority: 5,
       speed: 0.5,
       direction: {x:0, y:0},
       time: 5000
     },
-    "grab": {
+    Grab: {
       name: "grabMove",
       priority: 2,
-      speed: 5,
+      speed: 1.75,
       direction: {x:0, y:0},
       time: 5000
     }
   }
+
+export const moves: { [name in MoveName]: Move } = _moves

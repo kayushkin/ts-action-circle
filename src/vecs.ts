@@ -34,3 +34,6 @@ export const subtractVec2D = (vec1: Vec2D, vec2: Vec2D): Vec2D => {
 export const reverseVec2D = (vec: Vec2D): Vec2D => {
   return {x: -vec.x, y: -vec.y}
 }
+
+
+

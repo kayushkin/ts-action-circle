@@ -1,5 +1,5 @@
 import { Move, AutoMove, moves } from "./movement"
-import { CDinfo, _skills, SkillName } from "./skills"
+import { CDInfo, skills, SkillName } from "./skills"
 
 export interface Posn {
     x: number
@@ -25,7 +25,7 @@ export type Fighter = Circle & {
     hp: number
     movement: Move
     spd: number
-    skills: {[key: string]: CDinfo}
+    skills: {[key: string]: CDInfo}
 }
 
 export type BadGuy = Fighter & AutoMove & Id
@@ -37,9 +37,9 @@ export let circleMan: CircleMan = {
     radius: 50,
     color: 'blue',
     hp: 5,
-    movement: moves.notMoving,
-    spd: 0.3,
-    skills: _skills
+    movement: moves.NotMoving,
+    spd: 0.4,
+    skills: skills
   }
   
 export let bullets: Bullet[] = [
@@ -50,7 +50,7 @@ export let bullet: Bullet = {
     posn: {x: circleMan.posn.x, y: circleMan.posn.y },
     radius: 5,
     color: 'red',
-    movement: moves.bulletMove
+    movement: moves.BulletMove
   }
   
 export let orangeBullet: Bullet = {
@@ -58,7 +58,7 @@ export let orangeBullet: Bullet = {
     posn: {x: circleMan.posn.x, y: circleMan.posn.y },
     radius: 30,
     color: 'orange',
-    movement: moves.bulletMove
+    movement: moves.BulletMove
   }
   
 export let greenBadGuy1: BadGuy = {
@@ -68,9 +68,9 @@ export let greenBadGuy1: BadGuy = {
     color: 'green', 
     spd: 0.125, 
     hp: 70, 
-    movement: moves.notMoving,
-    autoMove: moves.notMoving,
-    skills: _skills
+    movement: moves.NotMoving,
+    autoMove: moves.NotMoving,
+    skills: skills
   }
 export let greenBadGuy2: BadGuy = {
     id: 2,
@@ -79,9 +79,9 @@ export let greenBadGuy2: BadGuy = {
     color: 'green', 
     spd: 0.125, 
     hp: 70, 
-    movement: moves.notMoving,
-    autoMove: moves.notMoving,
-    skills: _skills
+    movement: moves.NotMoving,
+    autoMove: moves.NotMoving,
+    skills: skills
   }
 export let greenBadGuy3: BadGuy = {
     id: 3,
@@ -90,9 +90,9 @@ export let greenBadGuy3: BadGuy = {
     color: 'green', 
     spd: 0.125, 
     hp: 70, 
-    movement: moves.notMoving,
-    autoMove: moves.notMoving,
-    skills: _skills
+    movement: moves.NotMoving,
+    autoMove: moves.NotMoving,
+    skills: skills
   }
   
 export let badGuys: BadGuy[] = [
