@@ -53,18 +53,13 @@ export const drawBullet = (bullet: Bullet, image: any) => {
   }
   }
 
-export const render = () => {
+export const renderLevel = () => {
   if (ctx === null) return
 
   // clear screen
   ctx.fillStyle = 'gray' 
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  
-
-  //ctx.drawImage(img, 0, 0, 96, 96, 0, 0, 96, 96)
-  //ctx.drawImage(img, 96, 0, 96, 96, (circleMan.posn.x-(circleMan.radius)), (circleMan.posn.y-(circleMan.radius)), 96, 96)
-  //drawCircle(circleMan)
   drawBlueHat(circleMan, img)
   badGuys.forEach(badGuy => {
     drawRedMonster(badGuy, img)
@@ -72,4 +67,17 @@ export const render = () => {
   bullets.forEach(bullet => {
     drawBullet(bullet, img)
   })
+}
+
+export const renderMenu = () => {
+  if (ctx === null) return
+
+  ctx.fillStyle = 'gray' 
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  
+  ctx.fillStyle = 'red' 
+  ctx.fillRect(100, 100, canvas.width- 500, canvas.height - 500)
+  
+  //TODO: draw menu options
 }

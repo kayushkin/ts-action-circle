@@ -3,7 +3,7 @@ import { actions, mousePosition, Actions } from "./inputs"
 import { scale, addVec2D, normalize, reverseVec2D, subtractVec2D, } from "./vecs"
 import { Move, moves } from "./movement"
 import { isOob, isCollision, isClickingOnBadGuy, badGuyLastClicked } from "./detection"
-import { isOnCD, SkillName, skills } from "./skills"
+import { isOnCD, SkillName, skills, _skills } from "./skills"
 import { cloneObject } from "./util"
 
 const queueMove = (fighter: Fighter, attemptedMove: Move) => {
@@ -33,15 +33,10 @@ const cDsUpdate = (dt: number) => {
 }
 
 const isSkillActivating = (skillName: SkillName): boolean => {
-  //console.log(skillName + ' is testing #####')
   switch (skillName) {
     case ('Grab'):
-      //console.log(skillName + " is activating is " + (actions[skillName] && (!isOnCD(circleMan.skills[skillName])) && isClickingOnBadGuy()))
-      //if (actions[skillName] && (!isOnCD(circleMan.skills[skillName])) && isClickingOnBadGuy()) console.log('grab is goin ###')
       return actions[skillName] && (!isOnCD(circleMan.skills[skillName])) && isClickingOnBadGuy()
     default:
-      //if (actions[skillName] && (!isOnCD(circleMan.skills[skillName]))) console.log(skillName + " is activating ###")
-      //console.log(skillName + " is activating is " + (actions[skillName] && (!isOnCD(circleMan.skills[skillName]))))
       return (actions[skillName] && (!isOnCD(circleMan.skills[skillName])))
   }
 }
@@ -59,11 +54,31 @@ const arrowKeysQueueMove = () => {
   queueMove(circleMan, arrowKeyMove)
 }
 
+type Fruit = 'apple' | 'orange'
+
+let apple: Fruit = 'apple'
+let orange: Fruit = 'orange'
+
+let basket: {[name in Fruit]: Float64Array} = {
+  apple: 'orange',
+  orange: 'orange',
+}
+
+for(var fruit: Fruit in basket) {
+  fruit
+}
+
+basket.apple
+
 const skillEffects = () => {
   orangePull()
-  Object.keys(skills).forEach( skill => {
+  for (var skill2: BigInt in skills) {
     //console.log('skills is' + skills)
     //console.log('skill is ' + skill)
+    //console.log(keyValue)
+    //if (keyValue[0] == ('Dash' | 'OrangeFire' | 'BasicFire' | 'Grab')) {console.log('IT IS THE THING')}
+    let skill: SkillName = skill2 as SkillName
+    //console.log(skill)
     if (isSkillActivating(skill)) {
       //console.log("isSkillActivating is true")
       circleMan.skills[skill].timeLeft = circleMan.skills[skill].cd
@@ -121,7 +136,9 @@ const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
 }
 
 const cleanup = () => {
+  let badGuysToRemove: number[] = []
   badGuys.forEach( (badGuy, badGuyIdx) => {
+    console.log('Cleanup is running with ' + badGuys.length + ' Badguys')
     bullets.forEach((bullet, bulletIdx) => {
       if (isCollision(badGuy, bullet)) {
         let bulletKB = cloneObject(moves.BulletKB)
@@ -132,13 +149,16 @@ const cleanup = () => {
           badGuy.hp -= 1
         }
         if (badGuy.hp < 1) {
-          badGuys.splice(badGuyIdx, 1)
+          badGuysToRemove.push(badGuyIdx)
         }
       }
     })
     if (isOob(badGuy)) {
-      badGuys.splice(badGuyIdx, 1)
+      badGuysToRemove.push(badGuyIdx)
     }
+  })
+  badGuysToRemove.forEach((badGuyIdx) => {
+    badGuys.splice(badGuyIdx, 1)
   })
   bullets.forEach((bullet, bulletIdx) => {
     if (isOob(bullet)) {

@@ -1,5 +1,6 @@
 import { Move, AutoMove, moves } from "./movement"
 import { CDInfo, skills, SkillName } from "./skills"
+import { cloneObject } from './util'
 
 export interface Posn {
     x: number
@@ -25,7 +26,7 @@ export type Fighter = Circle & {
     hp: number
     movement: Move
     spd: number
-    skills: {[key: string]: CDInfo}
+    skills: {[name in SkillName]: CDInfo}
 }
 
 export type BadGuy = Fighter & AutoMove & Id
@@ -61,41 +62,41 @@ export let orangeBullet: Bullet = {
     movement: moves.BulletMove
   }
   
-export let greenBadGuy1: BadGuy = {
-    id: 1,
-    posn: { x: 200, y: 200 }, 
-    radius: 50, 
-    color: 'green', 
-    spd: 0.125, 
-    hp: 70, 
-    movement: moves.NotMoving,
-    autoMove: moves.NotMoving,
-    skills: skills
-  }
-export let greenBadGuy2: BadGuy = {
-    id: 2,
-    posn: { x: 200, y: 400 }, 
-    radius: 50, 
-    color: 'green', 
-    spd: 0.125, 
-    hp: 70, 
-    movement: moves.NotMoving,
-    autoMove: moves.NotMoving,
-    skills: skills
-  }
-export let greenBadGuy3: BadGuy = {
-    id: 3,
-    posn: { x: 400, y: 250 }, 
-    radius: 50, 
-    color: 'green', 
-    spd: 0.125, 
-    hp: 70, 
-    movement: moves.NotMoving,
-    autoMove: moves.NotMoving,
-    skills: skills
-  }
+//export let greenBadGuy1: BadGuy = {
+//    id: 1,
+//    posn: { x: 200, y: 200 }, 
+//    radius: 50, 
+//    color: 'green', 
+//    spd: 0.125, 
+//    hp: 70, 
+//    movement: moves.NotMoving,
+//    autoMove: moves.NotMoving,
+//    skills: {}
+//  }
+//export let greenBadGuy2: BadGuy = {
+//    id: 2,
+//    posn: { x: 200, y: 400 }, 
+//    radius: 50, 
+//    color: 'green', 
+//    spd: 0.125, 
+//    hp: 70, 
+//    movement: moves.NotMoving,
+//    autoMove: moves.NotMoving,
+//    skills: {}
+//  }
+//export let greenBadGuy3: BadGuy = {
+//    id: 3,
+//    posn: { x: 400, y: 250 }, 
+//    radius: 50, 
+//    color: 'green', 
+//    spd: 0.125, 
+//    hp: 70, 
+//    movement: moves.NotMoving,
+//    autoMove: moves.NotMoving,
+//    skills: {}
+//  }
   
 export let badGuys: BadGuy[] = [
-    greenBadGuy1, greenBadGuy2, greenBadGuy3
+    //greenBadGuy1, greenBadGuy2, greenBadGuy3
   
   ]

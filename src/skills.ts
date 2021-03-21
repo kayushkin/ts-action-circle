@@ -3,17 +3,17 @@ export interface CDInfo {
     timeLeft: number
 }
 
-
 export type SkillName = keyof typeof _skills
-//SkillName = 'basic Fire' | 'orange fire' | 'dash | etc...
 
-const _skills: {[key: string]: CDInfo} = {
+//export type SkillName = 'Dash' | 'BasicFire' | 'OrangeFire' | 'Grab'
+
+export const _skills = {
     Dash: {
       cd: 1750,
       timeLeft: 0
     },
     BasicFire: {
-      cd: 300,
+      cd: 100,
       timeLeft: 0
     },
     OrangeFire: {
@@ -24,11 +24,16 @@ const _skills: {[key: string]: CDInfo} = {
       cd: 5000,
       timeLeft: 0
     },
-  }
+}
 
-export const skills: { [name in SkillName]: CDInfo } = _skills
+export const skills: { [name in SkillName]: SkillName } = _skills
+
+
 
 export const isOnCD = (ability: CDInfo): boolean => (ability.timeLeft > 0)
+
+//SkillName = 'basic Fire' | 'orange fire' | 'dash | etc...
+
 
 //interface Fighter {}
 //
