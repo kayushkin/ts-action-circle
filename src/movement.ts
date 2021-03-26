@@ -19,20 +19,20 @@ let _moves: {[key: string]: Move} = {
       name: "not moving",
       priority: 10,
       speed: 0,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       time: 0
     },
     ArrowKeyMove: {
       name: "arrow key move",
       priority: 10,
       speed: 1,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       time: 1000
     },
     BasicFire: {
       name: "bullet move",
       priority: 10,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       speed: 0.5,
       time: 10000
    },
@@ -40,35 +40,35 @@ let _moves: {[key: string]: Move} = {
       name: "collision",
       priority: 5,
       speed: 1,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       time:5
    },
    BulletKB: {
     name: "bulletKB", 
     priority: 2,
     speed: 2,  
-    direction: {x:0, y:0}, 
+    direction: Vec2D.default(), 
     time: 1
     },
     Dash: {
       name: "dash", 
       priority: 8,
       speed: 1, 
-      direction: {x:0, y:0}, 
+      direction: Vec2D.default(), 
       time: 250
     },
     OrangeFire: {
       name: "orangeBulletMove",
       priority: 5,
       speed: 0.5,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       time: 5000
     },
     Grab: {
       name: "grabMove",
       priority: 2,
       speed: 1.75,
-      direction: {x:0, y:0},
+      direction: Vec2D.default(),
       time: 5000
     }
   }

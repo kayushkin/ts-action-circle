@@ -1,15 +1,13 @@
-import { badGuys, Circle } from "./circles"
-import { magnitude, subtractVec2D } from "./vecs"
+import { badGuyManager, Circle } from "./circles"
+import { Vec2D } from "./vecs"
 import { canvas } from "./drawings"
 import { mousePosition } from "./inputs"
 
 export const isCollision = (circle1: Circle, circle2: Circle) => {
-    let differenceVec = subtractVec2D(circle1.posn, circle2.posn)
-    if (magnitude(differenceVec) < (circle2.radius + circle1.radius)) {
-      return true
-    } else return false
-  }
-  
+  let diff = (circle1.posn.clone().sub(circle2.posn))
+  return diff.magnitude() < (circle2.radius + circle1.radius)
+}
+
 export const isOob = (circle: Circle) => {
   let x = circle.posn.x
   let y = circle.posn.y
@@ -18,16 +16,9 @@ export const isOob = (circle: Circle) => {
   return x < -circle.radius || x > distanceToRight || y < -circle.radius || y > distanceToBottom
 }
 
-export const isClickingOnBadGuy = () => {
-  let result = false
-  badGuys.forEach(badGuy => {
-    let distanceToBadGuy = magnitude(subtractVec2D(mousePosition, badGuy.posn))
-    if(distanceToBadGuy < badGuy.radius) {
-      badGuyLastClicked = badGuy.id
-      result = true
-    }
+export const mousedOverBadGuy = () => {
+  return badGuyManager.badGuys.find(badGuy => {
+    let distanceToBadGuy = mousePosition.distance(badGuy.posn)
+    return distanceToBadGuy < badGuy.radius
   })
-  return result
 }
-
-export let badGuyLastClicked = 0

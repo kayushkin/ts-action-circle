@@ -1,71 +1,95 @@
-export interface CDInfo {
-    cd: number
-    timeLeft: number
+import { Fighter, Posn } from './circles'
+import { actions, mousePosition } from './inputs'
+import { mousedOverBadGuy } from './detection'
+import { Move } from './movement'
+
+export abstract class Skill {
+  lastCast: number
+
+  constructor(public name: string, public cd: number, public fighter: Fighter) {
+    this.lastCast = 0
+    
+  }
+
+  isOnCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
+
+  pressingKey(): boolean { return actions[this.name] }
+
+  isActivating(): boolean { return this.pressingKey() && !this.isOnCooldown && this.activatingQualifier() }
+
+  activatingQualifier(): boolean { return true }
+
+  cast() {
+    this.lastCast = Date.now()
+    this.onCast()
+  }
+
+  abstract onCast(): any
 }
 
-export type SkillName = keyof typeof _skills
+export class BasicFire extends Skill {
+  constructor(fighter: Fighter) {
+    super("BasicFire", 1750, fighter)
+  }
 
-//export type SkillName = 'Dash' | 'BasicFire' | 'OrangeFire' | 'Grab'
+  onCast() {
+    //if (skill.name == "BasicFire" || skill.name == "OrangeFire") {
+    //  let normalizedFiringVector = normalize(subtractVec2D(mousePosition, circleMan.posn))
+    //  let bulletMove = cloneObject(moves[skill])
+    //  let currentBullet = cloneObject(bullet)
+    //  if (skill == "OrangeFire") {
+    //    //currentBullet = cloneObject(orangeBullet)
+    //    bulletManager.newOrange(circleMan.posn)
+    //  }
+    //  //currentBullet.posn = circleMan.posn
+    //  //currentBullet.movement = bulletMove
+    //  //currentBullet.movement.direction = normalizedFiringVector
+    //  //bullets.push(currentBullet)
+    //  bulletManager.newBasic(circleMan.posn)
+    //}
+  }
+}
+export class OrangeFire extends Skill {
+  constructor(fighter: Fighter) {
+    super("OrangeFire", 1750, fighter)
+  }
 
-export const _skills = {
-    Dash: {
-      cd: 1750,
-      timeLeft: 0
-    },
-    BasicFire: {
-      cd: 100,
-      timeLeft: 0
-    },
-    OrangeFire: {
-      cd: 5000,
-      timeLeft: 0
-    },
-    Grab: {
-      cd: 5000,
-      timeLeft: 0
-    },
+  onCast() {
+    // dashing logic
+  }
+}
+export class Dash extends Skill {
+  constructor(fighter: Fighter) {
+    super("Dash", 1750, fighter)
+  }
+
+  onCast() {
+    //if (skill.name == "Dash"){
+    //  let dash = cloneObject(moves.Dash)
+    //  dash.direction = circleMan.movement.direction
+    //  queueMove(circleMan, dash)
+    //}
+  }
 }
 
-export const skills: { [name in SkillName]: SkillName } = _skills
+export class Grab extends Skill {
+  constructor(fighter: Fighter) {
+    super("Grab", 5000, fighter)
+  }
 
+  activatingQualifier(): boolean { return !(null == mousedOverBadGuy) }
 
+  onCast() {
+    //if (skill.name == "Grab") {
+      //  badGuys.forEach( badGuy => {
+      //    if (badGuy.id == badGuyLastClicked) {
+      //      console.log("is a go")
+      //      circleMan.skills.Grab.timeLeft = circleMan.skills.Grab.cd
+      //      let grabObj = cloneObject(moves.Grab)
+      //      grabObj.direction = normalize(subtractVec2D(circleMan.posn, badGuy.posn))
+      //      queueMove(badGuy, grabObj)
+      //    }
+      //  })
+  }
+}
 
-export const isOnCD = (ability: CDInfo): boolean => (ability.timeLeft > 0)
-
-//SkillName = 'basic Fire' | 'orange fire' | 'dash | etc...
-
-
-//interface Fighter {}
-//
-//abstract class Skill {
-//  lastCast: number
-//
-//  constructor(public name: string, public cd: number, public fighter: Fighter) {
-//    this.name = name
-//    this.cd = cd
-//    this.lastCast = 0
-//  }
-//
-//  isOnCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
-//
-//  cast() {
-//    this.lastCast = Date.now()
-//    this.onCast()
-//  }
-//
-//  abstract onCast()
-//}
-//
-//class Dash extends Skill {
-//  constructor(fighter: Fighter) {
-//    super("Dash", 1750, fighter)
-//  }
-//
-//  onCast() {
-//    // dashing logic
-//  }
-//}
-//
-//class CircleMan {
-//  dash: Dash = new Dash(this)
-//}

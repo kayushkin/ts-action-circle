@@ -1,102 +1,136 @@
 import { Move, AutoMove, moves } from "./movement"
-import { CDInfo, skills, SkillName } from "./skills"
-import { cloneObject } from './util'
+import { Dash, Grab, Skill } from "./skills"
+import { Vec2D } from './vecs'
 
-export interface Posn {
-    x: number
-    y: number
-}
+export type Posn = Vec2D
 
 export interface Id {
   id: number
 }
 
 export interface Circle {
-    posn: Posn
-    radius: number
-    color: string
+  posn: Posn
+  radius: number
 }
 
-export type Bullet = Circle & {
-    movement: Move
-    name: string
+export interface Drawable {
+  img: HTMLImageElement
+}
+
+export class Bullet implements Circle {
+  constructor(
+    public name: string,
+    public posn: Vec2D,
+    public radius: number,
+    public movement: Move,
+  ) {}
+
+  draw(ctx: CanvasRenderingContext2D, image: any) {
+    switch (this.name) {
+      case ('BasicFire'):
+        ctx.drawImage(image, 208, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+      case ('OrangeFire'):
+        ctx.drawImage(image, 190, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)        
+    }
+  }
+}
+
+export class BulletManager {
+  bullets: Bullet[] = []
+
+  newBasic(startPosn: Posn) {
+    this.bullets.push(
+      new Bullet(
+        "BasicFire",
+        startPosn.clone(),
+        5,
+        moves.BulletMove
+      )
+    )
+  }
+  newOrange(startPosn: Posn) {
+    this.bullets.push(
+      new Bullet(
+        "OrangeFire",
+        startPosn.clone(),
+        30,
+        moves.BulletMove
+      )
+    )
+  }
 }
 
 export type Fighter = Circle & {
-    hp: number
-    movement: Move
-    spd: number
-    skills: {[name in SkillName]: CDInfo}
+  hp: number
+  movement: Move
+  spd: number
 }
 
-export type BadGuy = Fighter & AutoMove & Id
+export class BadGuy implements Id, Fighter, AutoMove {
+  constructor(
+    public id: number,
+    public posn: Vec2D,
+    public radius: number,
+    public spd: number,
+    public hp: number,
+    public movement: Move,
+    public autoMove: Move,
+  ) {}
 
-export type CircleMan = Fighter
+  drawBasic(ctx: CanvasRenderingContext2D, image: HTMLImageElement) {
+    ctx.drawImage(image, 96, 0, 95.5, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+  }
+}
 
-export let circleMan: CircleMan = {
-    posn: { x: 100, y: 100 },
-    radius: 50,
-    color: 'blue',
-    hp: 5,
-    movement: moves.NotMoving,
-    spd: 0.4,
-    skills: skills
+export class BadGuyManager {
+  badGuys: BadGuy[] = []
+  nextId = 0
+
+  newBasic(startPosn: Posn) {
+    this.badGuys.push(
+      new BadGuy(
+        this.nextId,
+        startPosn.clone(),
+        50,
+        0.125,
+        70,
+        moves.NotMoving,
+        moves.NotMoving,
+      )
+    )
+    this.nextId++
   }
-  
-export let bullets: Bullet[] = [
-  ]
-  
-export let bullet: Bullet = {
-    name: "basic fire",
-    posn: {x: circleMan.posn.x, y: circleMan.posn.y },
-    radius: 5,
-    color: 'red',
-    movement: moves.BulletMove
+}
+
+export class CircleMan implements Fighter {
+  dash: Dash = new Dash(this)
+  grab: Grab = new Grab(this)
+  skills: Skill[] = [this.dash, this.grab]
+  constructor(
+    public posn: Posn,
+    public radius: number,
+    public hp: number,
+    public movement: Move,
+    public spd: number
+    ) {}
+
+  draw(ctx: CanvasRenderingContext2D, image: any) {
+    ctx.drawImage(image, 0, 0, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
   }
-  
-export let orangeBullet: Bullet = {
-    name: "orange fire",
-    posn: {x: circleMan.posn.x, y: circleMan.posn.y },
-    radius: 30,
-    color: 'orange',
-    movement: moves.BulletMove
-  }
-  
-//export let greenBadGuy1: BadGuy = {
-//    id: 1,
-//    posn: { x: 200, y: 200 }, 
-//    radius: 50, 
-//    color: 'green', 
-//    spd: 0.125, 
-//    hp: 70, 
-//    movement: moves.NotMoving,
-//    autoMove: moves.NotMoving,
-//    skills: {}
-//  }
-//export let greenBadGuy2: BadGuy = {
-//    id: 2,
-//    posn: { x: 200, y: 400 }, 
-//    radius: 50, 
-//    color: 'green', 
-//    spd: 0.125, 
-//    hp: 70, 
-//    movement: moves.NotMoving,
-//    autoMove: moves.NotMoving,
-//    skills: {}
-//  }
-//export let greenBadGuy3: BadGuy = {
-//    id: 3,
-//    posn: { x: 400, y: 250 }, 
-//    radius: 50, 
-//    color: 'green', 
-//    spd: 0.125, 
-//    hp: 70, 
-//    movement: moves.NotMoving,
-//    autoMove: moves.NotMoving,
-//    skills: {}
-//  }
-  
-export let badGuys: BadGuy[] = [
-    //greenBadGuy1, greenBadGuy2, greenBadGuy3
-  
-  ]
+}
+
+export let circleMan: CircleMan = new CircleMan(
+  new Vec2D(100, 100),
+  50,
+  5,
+  moves.NotMoving,
+  0.4,
+)
+
+export let badGuyManager: BadGuyManager = new BadGuyManager()
+
+badGuyManager.newBasic(new Vec2D(200,400))
+badGuyManager.newBasic(new Vec2D(400,200))
+badGuyManager.newBasic(new Vec2D(200,250))
+
+export let bulletManager: BulletManager = new BulletManager()

@@ -1,14 +1,17 @@
 import { Vec2D } from './vecs'
-import { isClickingOnBadGuy } from './detection'
-import { BadGuy } from './circles'
-import { SkillName } from './skills'
+import { Skill } from './skills'
+import { CircleMan, circleMan } from './circles'
 
 export type Actions = {
   up: boolean
   down: boolean
   left: boolean
   right: boolean
-} & { [name in SkillName]: boolean}
+  BasicFire: boolean
+  OrangeFire: boolean
+  Dash: boolean
+  Grab: boolean
+}
 
 export let actions: Actions = {
   up: false,
@@ -21,7 +24,7 @@ export let actions: Actions = {
   Grab: false,
 }
   
-export let mousePosition: Vec2D = {x: 200, y: 200}
+export let mousePosition: Vec2D = new Vec2D(200, 200)
 
 window.addEventListener('keydown', evt => {
   //console.log(evt.code)
@@ -49,19 +52,14 @@ window.addEventListener('keydown', evt => {
     break
   }
 })
-
-export const onMouseMove = (evt: MouseEvent) => {
-  mousePosition = {x: evt.pageX, y: evt.pageY}
-}
   
 window.addEventListener('mousedown', evt => {
   actions.BasicFire = true
-  mousePosition = {x: evt.pageX, y: evt.pageY}
 })
 
 
 window.addEventListener('mousemove', evt => {
-  mousePosition = {x: evt.pageX, y: evt.pageY}
+  mousePosition = new Vec2D(evt.pageX, evt.pageY)
 })
       
 window.addEventListener('mouseup', evt => {

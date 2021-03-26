@@ -1,39 +1,53 @@
-export interface Vec2D {
-    x: number
-    y: number
+export class Vec2D {
+  constructor(public x: number, public y: number) {}
+
+  static default(): Vec2D {
+    return new Vec2D(0, 0)
+  }
+  
+  magnitude(): number { return Math.sqrt(this.x * this.x + this.y * this.y) }
+
+  normalize() {
+    const m = this.magnitude()
+    if (m === 0) {
+      this.x = 0
+      this.y = 0
+    } else {
+      this.x /= m
+      this.y /= m
+    }
+    return this
   }
 
-export const magnitude = (vec: Vec2D): number => Math.sqrt(vec.x * vec.x + vec.y * vec.y)
+  scale(s: number) {
+    this.x *= s
+    this.y *= s
+    return this
+  }
 
-export const normalize = (vec: Vec2D): Vec2D => {
-    const m = magnitude(vec)
-    if (m === 0) return {x: 0, y: 0}
-    return {
-      x: vec.x / m,
-      y: vec.y / m,
-    }
+  add(v: Vec2D) {
+    this.x += v.x
+    this.y += v.y
+    return this
+  }
+
+  sub(v: Vec2D) {
+    this.x -= v.x
+    this.y -= v.y
+    return this
+  }
+
+  neg() {
+    this.x *= -1
+    this.y *= -1
+    return this
+  }
+
+  clone(): Vec2D {
+    return new Vec2D(this.x, this.y)
+  }
+
+  distance(v: Vec2D): number {
+    return this.clone().sub(v).magnitude()
+  }
 }
-
-export const scale = (vec: Vec2D, s: number): Vec2D => ({
-  x: vec.x * s,
-  y: vec.y * s,
-})
-
-export const addVec2D = (vec1: Vec2D, vec2: Vec2D): Vec2D => {
-  let xVec = vec1.x + vec2.x
-  let yVec = vec1.y + vec2.y
-  return {x: xVec, y: yVec}
-}
-
-export const subtractVec2D = (vec1: Vec2D, vec2: Vec2D): Vec2D => {
-  let xVec = vec1.x - vec2.x
-  let yVec = vec1.y - vec2.y
-  return {x: xVec, y: yVec}
-}
-
-export const reverseVec2D = (vec: Vec2D): Vec2D => {
-  return {x: -vec.x, y: -vec.y}
-}
-
-
-

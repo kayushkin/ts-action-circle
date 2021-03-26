@@ -10,11 +10,7 @@ const loop = () => {
   window.requestAnimationFrame(loop)
   let time = Date.now()
   update(time - lastFrame) // TODO delta
-  if (inLevel) {
-    renderLevel()
-  } else{
-    renderMenu()
-  }
+  inLevel ? renderLevel() : renderMenu()
   lastFrame = time
 }
 

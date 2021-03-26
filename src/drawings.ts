@@ -1,10 +1,11 @@
-import { Circle, circleMan, badGuys, bullets, Bullet } from './circles'
+import { circleMan, badGuyManager, bulletManager } from './circles'
 
 export let canvas = document.createElement('canvas')
 
-export let ctx = canvas.getContext('2d')
+export let ctx = canvas.getContext('2d')!
 
 export var imgPath = './src/assets/placeholders/placeholder_tokens.png'
+
 export var img = document.createElement('img') 
 img.style.display = "none"
 img.src = imgPath 
@@ -21,57 +22,28 @@ export const setupCanvas = () => {
   document.body.appendChild(canvas)
 }
 
-export const drawCircle = (circle: Circle) => {
-  if (ctx === null) return
-
-  ctx.fillStyle = circle.color
-  ctx.beginPath()
-  ctx.arc(circle.posn.x, circle.posn.y, circle.radius, 0, 2 * Math.PI)
-  ctx.closePath()
-  ctx.fill()
-}
-
-export const drawBlueHat = (circle: Circle, image: any) => {
-  if (ctx === null) return
-
-  ctx.drawImage(image, 0, 0, 96, 96, (circle.posn.x-(circle.radius)), (circle.posn.y-(circle.radius)), 96, 96)
-}
-
-export const drawRedMonster = (circle: Circle, image: any) => {
-  if (ctx === null) return
-
-  ctx.drawImage(image, 96, 0, 95.5, 96, (circle.posn.x-(circle.radius)), (circle.posn.y-(circle.radius)), 96, 96)
-}
-
-export const drawBullet = (bullet: Bullet, image: any) => {
-  if (ctx === null) return
-
-  if (bullet.name == 'orange fire') {
-    ctx.drawImage(image, 190, 64, 96, 96, (bullet.posn.x-(bullet.radius)), (bullet.posn.y-(bullet.radius)), 96, 96)
-  } else{
-    ctx.drawImage(image, 208, 64, 96, 96, (bullet.posn.x-(bullet.radius)), (bullet.posn.y-(bullet.radius)), 96, 96)
-  }
-  }
+//export const drawCircle = (circle: Circle) => {
+//  ctx.beginPath()
+//  ctx.arc(circle.posn.x, circle.posn.y, circle.radius, 0, 2 * Math.PI)
+//  ctx.closePath()
+//  ctx.fill()
+//}
 
 export const renderLevel = () => {
-  if (ctx === null) return
-
   // clear screen
   ctx.fillStyle = 'gray' 
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  drawBlueHat(circleMan, img)
-  badGuys.forEach(badGuy => {
-    drawRedMonster(badGuy, img)
+  circleMan.draw(ctx, img)
+  badGuyManager.badGuys.forEach(badGuy => {
+    badGuy.drawBasic(ctx, img)
   })
-  bullets.forEach(bullet => {
-    drawBullet(bullet, img)
+  bulletManager.bullets.forEach(bullet => {
+    bullet.draw(ctx, img)
   })
 }
 
 export const renderMenu = () => {
-  if (ctx === null) return
-
   ctx.fillStyle = 'gray' 
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
