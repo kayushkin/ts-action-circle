@@ -3,10 +3,12 @@ import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
 import { Move } from './movement'
 
-export abstract class Skill {
+export type skillName = 'up' | 'down' | 'left' | 'right' | 'BasicFire' | 'OrangeFire' | 'Dash' | 'Grab'
+
+export abstract class Skill {  
   lastCast: number
 
-  constructor(public name: string, public cd: number, public fighter: Fighter) {
+  constructor(public name: skillName, public cd: number, public fighter: Fighter) {
     this.lastCast = 0
     
   }
@@ -58,6 +60,7 @@ export class OrangeFire extends Skill {
     // dashing logic
   }
 }
+
 export class Dash extends Skill {
   constructor(fighter: Fighter) {
     super("Dash", 1750, fighter)
