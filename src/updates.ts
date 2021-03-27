@@ -13,6 +13,7 @@ const queueMove = (fighter: Fighter, attemptedMove: Move) => {
 
 const circleMove = (circleWithMove: Fighter | Bullet, dt: number) => {
   if (circleWithMove.movement.time >= 0 ){
+    //change distance moved to distance*frames passed or time left
     let adjustedDistance = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
     let dcircleWithMovePosn = circleWithMove.movement.direction.clone().scale(adjustedDistance)
     circleWithMove.posn = circleWithMove.posn.add(dcircleWithMovePosn)
@@ -36,9 +37,7 @@ const arrowKeysQueueMove = () => {
 const skillEffects = () => {
   orangePull()
   for (let skill of circleMan.skills) {
-    //console.log('### skillEffects is activating for ' + skill.name + ' ' + skill.isActivating())
     if (skill.isActivating()) { 
-      console.log(skill.isActivating())
       skill.cast() }
   }
 }

@@ -7,26 +7,25 @@ import { cloneObject } from './util'
 export type skillName = 'up' | 'down' | 'left' | 'right' | 'BasicFire' | 'OrangeFire' | 'Dash' | 'Grab'
 
 export abstract class Skill {  
+  //date last time skill was cast
   lastCast: number
 
   constructor(public name: skillName, public cd: number, public fighter: Fighter) {
     this.lastCast = 0
-    
   }
 
   isOffCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
 
   pressingKey(): boolean { return actions[this.name] }
 
-  isActivating(): boolean { return this.pressingKey() && this.isOffCooldown() && this.activatingQualifier() }
+  isActivating(): boolean { return this.pressingKey() && this.isOffCooldown() && this.activatingCondition() }
 
-  activatingQualifier(): boolean { return true }
+  //specific condition for certain skills to activate
+  activatingCondition(): boolean { return true }
 
   cast() {
-    console.log('### cast is activating isOffCD = ' + this.isActivating() + ' ### skill off cd ' + this.isOffCooldown() + ' ### this.cd = ' + this.cd + ' ### date - lastcast = ' + (Date.now() - this.lastCast) )
     this.lastCast = Date.now()
     this.onCast()
-    
   }
 
   abstract onCast(): any
@@ -39,14 +38,9 @@ export class BasicFire extends Skill {
 
   onCast() {
     let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
-    console.log(normalizedFiringVector)
     let bulletMove = cloneObject(moves[this.name])
     bulletMove.direction = normalizedFiringVector
-    //bullets.push(currentBullet)
     bulletManager.newBasic(circleMan.posn, bulletMove)
-    console.log(bulletMove)
-    console.log(circleMan.movement)
-    
   }
 }
 export class OrangeFire extends Skill {
@@ -78,7 +72,7 @@ export class Grab extends Skill {
     super("Grab", 5000, fighter)
   }
 
-  activatingQualifier(): boolean { return !(null == mousedOverBadGuy) }
+  activatingCondition(): boolean { return !(null == mousedOverBadGuy) }
 
   onCast() {
     //if (skill.name == "Grab") {
