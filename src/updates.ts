@@ -13,8 +13,8 @@ const queueMove = (fighter: Fighter, attemptedMove: Move) => {
 
 const circleMove = (circleWithMove: Fighter | Bullet, dt: number) => {
   if (circleWithMove.movement.time >= 0 ){
-    let adjustedSpeed = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
-    let dcircleWithMovePosn = circleWithMove.movement.direction.scale(adjustedSpeed)
+    let adjustedDistance = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
+    let dcircleWithMovePosn = circleWithMove.movement.direction.clone().scale(adjustedDistance)
     circleWithMove.posn = circleWithMove.posn.add(dcircleWithMovePosn)
     circleWithMove.movement.time -= dt
   }
@@ -36,9 +36,10 @@ const arrowKeysQueueMove = () => {
 const skillEffects = () => {
   orangePull()
   for (let skill of circleMan.skills) {
-    if (skill.isActivating()) {
-      skill.cast()
-    }
+    //console.log('### skillEffects is activating for ' + skill.name + ' ' + skill.isActivating())
+    if (skill.isActivating()) { 
+      console.log(skill.isActivating())
+      skill.cast() }
   }
 }
 
@@ -66,7 +67,7 @@ const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
 const cleanup = () => {
   let badGuysToRemove: number[] = []
   badGuyManager.badGuys.forEach( (badGuy, badGuyIdx) => {
-    console.log('Cleanup is running with ' + badGuyManager.badGuys.length + ' Badguys')
+    //console.log('Cleanup is running with ' + badGuyManager.badGuys.length + ' Badguys')
     bulletManager.bullets.forEach((bullet, bulletIdx) => {
       if (isCollision(badGuy, bullet)) {
         let bulletKB = cloneObject(moves.BulletKB)

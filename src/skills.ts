@@ -1,7 +1,8 @@
-import { Fighter, Posn } from './circles'
+import { Fighter, Posn, circleMan, bulletManager, badGuyManager } from './circles'
 import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
-import { Move } from './movement'
+import { Move, moves } from './movement'
+import { cloneObject } from './util'
 
 export type skillName = 'up' | 'down' | 'left' | 'right' | 'BasicFire' | 'OrangeFire' | 'Dash' | 'Grab'
 
@@ -13,17 +14,19 @@ export abstract class Skill {
     
   }
 
-  isOnCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
+  isOffCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
 
   pressingKey(): boolean { return actions[this.name] }
 
-  isActivating(): boolean { return this.pressingKey() && !this.isOnCooldown && this.activatingQualifier() }
+  isActivating(): boolean { return this.pressingKey() && this.isOffCooldown() && this.activatingQualifier() }
 
   activatingQualifier(): boolean { return true }
 
   cast() {
+    console.log('### cast is activating isOffCD = ' + this.isActivating() + ' ### skill off cd ' + this.isOffCooldown() + ' ### this.cd = ' + this.cd + ' ### date - lastcast = ' + (Date.now() - this.lastCast) )
     this.lastCast = Date.now()
     this.onCast()
+    
   }
 
   abstract onCast(): any
@@ -31,24 +34,19 @@ export abstract class Skill {
 
 export class BasicFire extends Skill {
   constructor(fighter: Fighter) {
-    super("BasicFire", 1750, fighter)
+    super("BasicFire", 200, fighter)
   }
 
   onCast() {
-    //if (skill.name == "BasicFire" || skill.name == "OrangeFire") {
-    //  let normalizedFiringVector = normalize(subtractVec2D(mousePosition, circleMan.posn))
-    //  let bulletMove = cloneObject(moves[skill])
-    //  let currentBullet = cloneObject(bullet)
-    //  if (skill == "OrangeFire") {
-    //    //currentBullet = cloneObject(orangeBullet)
-    //    bulletManager.newOrange(circleMan.posn)
-    //  }
-    //  //currentBullet.posn = circleMan.posn
-    //  //currentBullet.movement = bulletMove
-    //  //currentBullet.movement.direction = normalizedFiringVector
-    //  //bullets.push(currentBullet)
-    //  bulletManager.newBasic(circleMan.posn)
-    //}
+    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
+    console.log(normalizedFiringVector)
+    let bulletMove = cloneObject(moves[this.name])
+    bulletMove.direction = normalizedFiringVector
+    //bullets.push(currentBullet)
+    bulletManager.newBasic(circleMan.posn, bulletMove)
+    console.log(bulletMove)
+    console.log(circleMan.movement)
+    
   }
 }
 export class OrangeFire extends Skill {

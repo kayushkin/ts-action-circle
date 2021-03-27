@@ -20,8 +20,8 @@ export class Vec2D {
   }
 
   scale(s: number) {
-    this.x *= s
-    this.y *= s
+    this.x = s * this.x
+    this.y = s * this.y
     return this
   }
 

@@ -1,5 +1,5 @@
 import { Move, AutoMove, moves } from "./movement"
-import { Dash, Grab, Skill } from "./skills"
+import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 
 export type Posn = Vec2D
@@ -29,8 +29,10 @@ export class Bullet implements Circle {
     switch (this.name) {
       case ('BasicFire'):
         ctx.drawImage(image, 208, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+        break
       case ('OrangeFire'):
-        ctx.drawImage(image, 190, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)        
+        ctx.drawImage(image, 190, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+        break        
     }
   }
 }
@@ -38,13 +40,13 @@ export class Bullet implements Circle {
 export class BulletManager {
   bullets: Bullet[] = []
 
-  newBasic(startPosn: Posn) {
+  newBasic(startPosn: Posn, bulletMove: Move) {
     this.bullets.push(
       new Bullet(
         "BasicFire",
         startPosn.clone(),
         5,
-        moves.BulletMove
+        bulletMove
       )
     )
   }
@@ -105,7 +107,9 @@ export class BadGuyManager {
 export class CircleMan implements Fighter {
   dash: Dash = new Dash(this)
   grab: Grab = new Grab(this)
-  skills: Skill[] = [this.dash, this.grab]
+  basicFire: BasicFire = new BasicFire(this)
+  orangeFire: OrangeFire = new OrangeFire(this)
+  skills: Skill[] = [this.dash, this.grab, this.orangeFire, this.basicFire]
   constructor(
     public posn: Posn,
     public radius: number,
