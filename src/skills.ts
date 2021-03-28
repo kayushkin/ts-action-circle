@@ -1,4 +1,4 @@
-import { Fighter, Posn, circleMan, bulletManager, badGuyManager } from './circles'
+import { Fighter, Posn, circleMan, bulletManager, badGuyManager, BadGuy } from './circles'
 import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
 import { Move, moves } from './movement'
@@ -37,8 +37,8 @@ export class BasicFire extends Skill {
   }
 
   onCast() {
+    let bulletMove: Move = new Move('basicFire', 10, 0.5, 10000)
     let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
-    let bulletMove = cloneObject(moves[this.name])
     bulletMove.direction = normalizedFiringVector
     bulletManager.newBasic(circleMan.posn, bulletMove)
   }
@@ -49,7 +49,10 @@ export class OrangeFire extends Skill {
   }
 
   onCast() {
-    // dashing logic
+    let orangeBulletMove: Move = new Move('orangeFire', 5, 0.4, 50000)
+    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
+    orangeBulletMove.direction = normalizedFiringVector
+    bulletManager.newOrange(circleMan.posn, orangeBulletMove)
   }
 }
 
@@ -59,11 +62,9 @@ export class Dash extends Skill {
   }
 
   onCast() {
-    //if (skill.name == "Dash"){
-    //  let dash = cloneObject(moves.Dash)
-    //  dash.direction = circleMan.movement.direction
-    //  queueMove(circleMan, dash)
-    //}
+    let dash: Move = new Move('dash', 8, 0.5, 250)
+    dash.direction = circleMan.movement.direction
+    dash.queueMove(circleMan)
   }
 }
 
@@ -72,19 +73,15 @@ export class Grab extends Skill {
     super("Grab", 5000, fighter)
   }
 
-  activatingCondition(): boolean { return !(null == mousedOverBadGuy) }
-
+  activatingCondition(): boolean { return !(null == mousedOverBadGuy()) }
+  
   onCast() {
-    //if (skill.name == "Grab") {
-      //  badGuys.forEach( badGuy => {
-      //    if (badGuy.id == badGuyLastClicked) {
-      //      console.log("is a go")
-      //      circleMan.skills.Grab.timeLeft = circleMan.skills.Grab.cd
-      //      let grabObj = cloneObject(moves.Grab)
-      //      grabObj.direction = normalize(subtractVec2D(circleMan.posn, badGuy.posn))
-      //      queueMove(badGuy, grabObj)
-      //    }
-      //  })
+    let grab: Move = new Move('grab', 2, 1.75, 5000)
+    if (mousedOverBadGuy()) {
+      let badGuy = mousedOverBadGuy() as BadGuy  //fix this
+      grab.direction = circleMan.posn.sub(badGuy.posn).normalize()
+      grab.queueMove(badGuy)
+    }
   }
 }
 
