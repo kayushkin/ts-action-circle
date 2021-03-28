@@ -5,22 +5,6 @@ import { Move, moves } from "./movement"
 import { isOob, isCollision, mousedOverBadGuy } from "./detection"
 import { cloneObject } from "./util"
 
-const queueMove = (fighter: Fighter, attemptedMove: Move) => {
-  if (fighter.movement.time < 1 || fighter.movement.priority > (attemptedMove.priority - 1)) {
-    fighter.movement = attemptedMove 
-  }
-}
-
-const circleMove = (circleWithMove: Fighter | Bullet, dt: number) => {
-  if (circleWithMove.movement.time >= 0 ){
-    //change distance moved to distance*frames passed or time left
-    let adjustedDistance = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
-    let dcircleWithMovePosn = circleWithMove.movement.direction.clone().scale(adjustedDistance)
-    circleWithMove.posn = circleWithMove.posn.add(dcircleWithMovePosn)
-    circleWithMove.movement.time -= dt
-  }
-}
-
 const arrowKeysQueueMove = () => {
   let dPosn: Vec2D = Vec2D.default()
   if (actions.up) dPosn.y -= 1
