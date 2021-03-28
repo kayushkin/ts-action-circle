@@ -1,5 +1,5 @@
 import { Vec2D } from "./vecs"
-import { Fighter, Bullet } from "./circles"
+import { Fighter, Bullet, circleMan, BadGuy } from "./circles"
 
 export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab'
 
@@ -23,6 +23,9 @@ export class Move {
       //change distance moved to distance*frames passed or time left
       let adjustedDistance = circleWithMove.movement.speed*(Math.min(dt, circleWithMove.movement.time))
       let dcircleWithMovePosn = circleWithMove.movement.direction.clone().scale(adjustedDistance)
+      if (dcircleWithMovePosn.x > 100){
+        console.log('### something weird' + circleWithMove + dcircleWithMovePosn )
+      }
       circleWithMove.posn = circleWithMove.posn.add(dcircleWithMovePosn)
       circleWithMove.movement.time -= dt
     }

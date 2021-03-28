@@ -5,6 +5,52 @@ import { Move } from "./movement"
 import { isOob, isCollision, mousedOverBadGuy } from "./detection"
 import { cloneObject } from "./util"
 
+const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
+  badGuyManager.badGuys.forEach((otherBadGuy, otherBadGuyIdx) => {
+    if (badGuyIdx == otherBadGuyIdx) {
+      return
+    } else if (isCollision(badGuy, otherBadGuy)) {
+      let pushObj: Move = new Move('pushObj', 5, 1, 5)
+      pushObj.direction = badGuy.posn.clone().sub(otherBadGuy.posn.clone()).normalize()
+      pushObj.queueMove(badGuy)
+      let reversePushObj = pushObj
+      reversePushObj.direction = reversePushObj.direction.neg()
+      reversePushObj.queueMove(otherBadGuy)
+    }
+  })
+  if (isCollision(badGuy, circleMan)) {
+    let pushObj = new Move('pushObj', 5, 1, 5)
+    pushObj.direction = badGuy.posn.clone().sub(circleMan.posn.clone()).normalize()
+    pushObj.queueMove(badGuy)
+  } 
+}
+
+const badGuysCollisionForAll = (dt: number) => {
+  badGuyManager.badGuys.forEach((badGuy, badGuyIdx) => {
+    badGuysCollisionDetection(badGuy, badGuyIdx)
+  })
+}
+
+const orangePull = () => {
+  bulletManager.bullets.forEach((bullet) => {
+    if (bullet.name == "orange fire") {
+      badGuyManager.badGuys.forEach(badguy => {
+        let pushToOrange: Move = new Move('pushObj', 5, 1, 5)
+        pushToOrange.direction = bullet.posn.clone().sub(badguy.posn.clone()).normalize()
+        pushToOrange.queueMove(badguy)
+      })
+    }
+  })
+}
+
+const skillEffects = () => {
+  //orangePull()
+  for (let skill of circleMan.skills) {
+    if (skill.isActivating()) { 
+      skill.cast() }
+  }
+}
+
 const arrowKeysQueueMove = () => {
   let dPosn: Vec2D = Vec2D.default()
   if (actions.up) dPosn.y -= 1
@@ -18,33 +64,9 @@ const arrowKeysQueueMove = () => {
   arrowKeyMove.queueMove(circleMan)
 }
 
-const skillEffects = () => {
-  orangePull()
-  for (let skill of circleMan.skills) {
-    if (skill.isActivating()) { 
-      skill.cast() }
-  }
-}
-
-
-const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
-  badGuyManager.badGuys.forEach((otherBadGuy, otherBadGuyIdx) => {
-    if (badGuyIdx == otherBadGuyIdx) {
-      return
-    } else if (isCollision(badGuy, otherBadGuy)) {
-      let pushObj: Move = new Move('pushObj', 5, 1, 5)
-      pushObj.direction = badGuy.posn.sub(otherBadGuy.posn).normalize()
-      pushObj.queueMove(badGuy)
-      let reversePushObj = pushObj
-      reversePushObj.direction = reversePushObj.direction.neg()
-      reversePushObj.queueMove(otherBadGuy)
-    }
-  })
-  if (isCollision(badGuy, circleMan)) {
-    let pushObj = new Move('pushObj', 5, 1, 5)
-    pushObj.direction = badGuy.posn.sub(circleMan.posn).normalize()
-    pushObj.queueMove(badGuy)
-  } 
+const skillsUpdate = (dt: number) => {
+  skillEffects()
+  arrowKeysQueueMove()
 }
 
 const cleanup = () => {
@@ -54,10 +76,10 @@ const cleanup = () => {
     bulletManager.bullets.forEach((bullet, bulletIdx) => {
       if (isCollision(badGuy, bullet)) {
         let bulletKB: Move = new Move('bulletKB', 2, 2, 1)
-        bulletKB.direction = badGuy.posn.sub(bullet.posn).normalize()
+        bulletKB.direction = badGuy.posn.clone().sub(bullet.posn.clone()).normalize()
         bulletKB.queueMove(badGuy)
-        if (bullet.name == "basic fire") {
-          badGuysToRemove.push(badGuyIdx)
+        if (bullet.name == "BasicFire") {
+          bulletManager.bullets.splice(bulletIdx)
           badGuy.hp -= 1
         }
         if (badGuy.hp < 1) {
@@ -79,32 +101,9 @@ const cleanup = () => {
   })
 }
 
-const orangePull = () => {
-  bulletManager.bullets.forEach((bullet) => {
-    if (bullet.name == "orange fire") {
-      badGuyManager.badGuys.forEach(badguy => {
-        let pushToOrange: Move = new Move('pushObj', 5, 1, 5)
-        pushToOrange.direction = bullet.posn.sub(badguy.posn).normalize()
-        pushToOrange.queueMove(badguy)
-      })
-    }
-  })
-}
-
 const bulletsMoveToPosn = (dt: number) => {
   bulletManager.bullets.forEach((bullet, idx) => {
     bullet.movement.circleMove(bullet, dt)
-  })
-}
-
-const skillsUpdate = (dt: number) => {
-  skillEffects()
-  arrowKeysQueueMove()
-}
-
-const badGuysQueueMove = (dt: number) => {
-  badGuyManager.badGuys.forEach((badGuy, badGuyIdx) => {
-    badGuysCollisionDetection(badGuy, badGuyIdx)
   })
 }
 
@@ -121,7 +120,7 @@ const circlesMove = (dt: number) => {
 }
 
 export const update = (dt: number) => {
-  badGuysQueueMove(dt)
+  badGuysCollisionForAll(dt)
   skillsUpdate(dt)
   cleanup()
   circlesMove(dt)

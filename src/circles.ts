@@ -76,7 +76,6 @@ export class BadGuy implements Id, Fighter {
     public spd: number,
     public hp: number,
     public movement: Move,
-    public autoMove: Move,
   ) {}
 
   drawBasic(ctx: CanvasRenderingContext2D, image: HTMLImageElement) {
@@ -95,8 +94,7 @@ export class BadGuyManager {
         startPosn.clone(),
         50,
         0.125,
-        70,
-        new Move('notMoving', 10, 0, 0),
+        7,
         new Move('notMoving', 10, 0, 0),
       )
     )

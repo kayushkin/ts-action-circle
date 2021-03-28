@@ -39,7 +39,7 @@ export class BasicFire extends Skill {
     let bulletMove: Move = new Move('basicFire', 10, 0.5, 10000)
     let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
     bulletMove.direction = normalizedFiringVector
-    bulletManager.newBasic(circleMan.posn, bulletMove)
+    bulletManager.newBasic(circleMan.posn.clone(), bulletMove)
   }
 }
 export class OrangeFire extends Skill {
@@ -49,9 +49,9 @@ export class OrangeFire extends Skill {
 
   onCast() {
     let orangeBulletMove: Move = new Move('orangeFire', 5, 0.4, 50000)
-    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
+    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn.clone()).normalize()
     orangeBulletMove.direction = normalizedFiringVector
-    bulletManager.newOrange(circleMan.posn, orangeBulletMove)
+    bulletManager.newOrange(circleMan.posn.clone(), orangeBulletMove)
   }
 }
 
@@ -78,7 +78,7 @@ export class Grab extends Skill {
     let grab: Move = new Move('grab', 2, 1.75, 5000)
     if (mousedOverBadGuy()) {
       let badGuy = mousedOverBadGuy() as BadGuy  //fix this
-      grab.direction = circleMan.posn.sub(badGuy.posn).normalize()
+      grab.direction = circleMan.posn.clone().sub(badGuy.posn.clone()).normalize()
       grab.queueMove(badGuy)
     }
   }
