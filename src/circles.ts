@@ -50,13 +50,13 @@ export class BulletManager {
       )
     )
   }
-  newOrange(startPosn: Posn) {
+  newOrange(startPosn: Posn, bulletMove: Move) {
     this.bullets.push(
       new Bullet(
         "OrangeFire",
         startPosn.clone(),
         30,
-        moves.BulletMove
+        bulletMove
       )
     )
   }

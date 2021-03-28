@@ -3,16 +3,16 @@ import { Fighter, Bullet } from "./circles"
 
 export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab'
 
-export abstract class Move {
+export class Move {
   direction: Vec2D
 
   constructor(public name: moveName, public priority: number, public speed: number, public time: number) {
     this.direction = Vec2D.default()
   }
 
-  queueMove(fighter: Fighter, attemptedMove: Move) {
-    if (fighter.movement.time < 1 || fighter.movement.priority > (attemptedMove.priority - 1)) {
-      fighter.movement = attemptedMove 
+  queueMove(fighter: Fighter) {
+    if (fighter.movement.time < 1 || fighter.movement.priority > (this.priority - 1)) {
+      fighter.movement = this 
     }
   }
 
