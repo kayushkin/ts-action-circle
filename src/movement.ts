@@ -3,6 +3,8 @@ import { Fighter, Bullet } from "./circles"
 
 export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab'
 
+export type AutoMove = Move
+
 export class Move {
   direction: Vec2D
 

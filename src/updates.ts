@@ -1,7 +1,7 @@
 import { circleMan, badGuyManager, bulletManager, Fighter, BadGuy, Bullet } from "./circles"
 import { actions, mousePosition, Actions } from "./inputs"
 import { Vec2D, } from "./vecs"
-import { Move, moves } from "./movement"
+import { Move } from "./movement"
 import { isOob, isCollision, mousedOverBadGuy } from "./detection"
 import { cloneObject } from "./util"
 
@@ -12,10 +12,10 @@ const arrowKeysQueueMove = () => {
   if (actions.left) dPosn.x -= 1 
   if (actions.right) dPosn.x += 1
   dPosn = dPosn.normalize()
-  let arrowKeyMove = cloneObject(moves.ArrowKeyMove)
+  let arrowKeyMove: Move = new Move('arrowKey', 10, 1, 1000)
   arrowKeyMove.direction = dPosn
   arrowKeyMove.speed = circleMan.spd
-  queueMove(circleMan, arrowKeyMove)
+  arrowKeyMove.queueMove(circleMan)
 }
 
 const skillEffects = () => {
@@ -32,18 +32,18 @@ const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
     if (badGuyIdx == otherBadGuyIdx) {
       return
     } else if (isCollision(badGuy, otherBadGuy)) {
-      let pushObj = cloneObject(moves.PushObj)
+      let pushObj: Move = new Move('pushObj', 5, 1, 5)
       pushObj.direction = badGuy.posn.sub(otherBadGuy.posn).normalize()
-      queueMove(badGuy, pushObj)
-      let reversePushObj = {...pushObj}
+      pushObj.queueMove(badGuy)
+      let reversePushObj = pushObj
       reversePushObj.direction = reversePushObj.direction.neg()
-      queueMove(otherBadGuy, reversePushObj)
+      reversePushObj.queueMove(otherBadGuy)
     }
   })
   if (isCollision(badGuy, circleMan)) {
-    let pushObj = cloneObject(moves.PushObj)
+    let pushObj = new Move('pushObj', 5, 1, 5)
     pushObj.direction = badGuy.posn.sub(circleMan.posn).normalize()
-    badGuy.movement = pushObj
+    pushObj.queueMove(badGuy)
   } 
 }
 
@@ -53,9 +53,9 @@ const cleanup = () => {
     //console.log('Cleanup is running with ' + badGuyManager.badGuys.length + ' Badguys')
     bulletManager.bullets.forEach((bullet, bulletIdx) => {
       if (isCollision(badGuy, bullet)) {
-        let bulletKB = cloneObject(moves.BulletKB)
+        let bulletKB: Move = new Move('bulletKB', 2, 2, 1)
         bulletKB.direction = badGuy.posn.sub(bullet.posn).normalize()
-        queueMove(badGuy, bulletKB)
+        bulletKB.queueMove(badGuy)
         if (bullet.name == "basic fire") {
           badGuysToRemove.push(badGuyIdx)
           badGuy.hp -= 1
@@ -83,9 +83,9 @@ const orangePull = () => {
   bulletManager.bullets.forEach((bullet) => {
     if (bullet.name == "orange fire") {
       badGuyManager.badGuys.forEach(badguy => {
-        let pushToOrange = cloneObject(moves.PushObj)
+        let pushToOrange: Move = new Move('pushObj', 5, 1, 5)
         pushToOrange.direction = bullet.posn.sub(badguy.posn).normalize()
-        queueMove(badguy, pushToOrange)
+        pushToOrange.queueMove(badguy)
       })
     }
   })
@@ -93,7 +93,7 @@ const orangePull = () => {
 
 const bulletsMoveToPosn = (dt: number) => {
   bulletManager.bullets.forEach((bullet, idx) => {
-    circleMove(bullet, dt)
+    bullet.movement.circleMove(bullet, dt)
   })
 }
 
@@ -110,12 +110,12 @@ const badGuysQueueMove = (dt: number) => {
 
 const badGuysMoveToPosn = (dt: number) => {
   badGuyManager.badGuys.forEach(badGuy => {
-    circleMove(badGuy, dt)
+    badGuy.movement.circleMove(badGuy, dt)
   })
 }
 
 const circlesMove = (dt: number) => {
-  circleMove(circleMan, dt)
+  circleMan.movement.circleMove(circleMan, dt)
   bulletsMoveToPosn(dt)
   badGuysMoveToPosn(dt)
 }

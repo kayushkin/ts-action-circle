@@ -1,8 +1,7 @@
 import { Fighter, Posn, circleMan, bulletManager, badGuyManager, BadGuy } from './circles'
 import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
-import { Move, moves } from './movement'
-import { cloneObject } from './util'
+import { Move } from './movement'
 
 export type skillName = 'up' | 'down' | 'left' | 'right' | 'BasicFire' | 'OrangeFire' | 'Dash' | 'Grab'
 

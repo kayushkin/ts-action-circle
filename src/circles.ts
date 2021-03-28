@@ -1,4 +1,4 @@
-import { Move, AutoMove, moves } from "./movement"
+import { Move, AutoMove } from "./movement"
 import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 
@@ -68,7 +68,7 @@ export type Fighter = Circle & {
   spd: number
 }
 
-export class BadGuy implements Id, Fighter, AutoMove {
+export class BadGuy implements Id, Fighter {
   constructor(
     public id: number,
     public posn: Vec2D,
@@ -96,8 +96,8 @@ export class BadGuyManager {
         50,
         0.125,
         70,
-        moves.NotMoving,
-        moves.NotMoving,
+        new Move('notMoving', 10, 0, 0),
+        new Move('notMoving', 10, 0, 0),
       )
     )
     this.nextId++
@@ -127,7 +127,7 @@ export let circleMan: CircleMan = new CircleMan(
   new Vec2D(100, 100),
   50,
   5,
-  moves.NotMoving,
+  new Move('notMoving', 10, 0, 0),
   0.4,
 )
 
