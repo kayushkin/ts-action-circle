@@ -11,16 +11,16 @@ const badGuysCollisionDetection = (badGuy: BadGuy, badGuyIdx: number) => {
       return
     } else if (isCollision(badGuy, otherBadGuy)) {
       let pushObj: Move = new Move('pushObj', 5, 1, 5)
-      pushObj.direction = badGuy.posn.clone().sub(otherBadGuy.posn.clone()).normalize()
+      pushObj.direction = badGuy.posn.clone().sub(otherBadGuy.posn).normalize()
       pushObj.queueMove(badGuy)
-      let reversePushObj = pushObj
-      reversePushObj.direction = reversePushObj.direction.neg()
+      let reversePushObj: Move = new Move('reversePushObj', 5, 1, 5)
+      reversePushObj.direction = pushObj.direction.clone().neg()
       reversePushObj.queueMove(otherBadGuy)
     }
   })
   if (isCollision(badGuy, circleMan)) {
     let pushObj = new Move('pushObj', 5, 1, 5)
-    pushObj.direction = badGuy.posn.clone().sub(circleMan.posn.clone()).normalize()
+    pushObj.direction = badGuy.posn.clone().sub(circleMan.posn).normalize()
     pushObj.queueMove(badGuy)
   } 
 }
@@ -33,10 +33,10 @@ const badGuysCollisionForAll = (dt: number) => {
 
 const orangePull = () => {
   bulletManager.bullets.forEach((bullet) => {
-    if (bullet.name == "orange fire") {
+    if (bullet.name == "OrangeFire") {
       badGuyManager.badGuys.forEach(badguy => {
-        let pushToOrange: Move = new Move('pushObj', 5, 1, 5)
-        pushToOrange.direction = bullet.posn.clone().sub(badguy.posn.clone()).normalize()
+        let pushToOrange: Move = new Move('pushObj', 5, 1, 3)
+        pushToOrange.direction = bullet.posn.clone().sub(badguy.posn).normalize()
         pushToOrange.queueMove(badguy)
       })
     }
@@ -44,7 +44,7 @@ const orangePull = () => {
 }
 
 const skillEffects = () => {
-  //orangePull()
+  orangePull()
   for (let skill of circleMan.skills) {
     if (skill.isActivating()) { 
       skill.cast() }
@@ -71,6 +71,7 @@ const skillsUpdate = (dt: number) => {
 
 const cleanup = () => {
   let badGuysToRemove: number[] = []
+  let bulletsToRemove: number[] = []
   badGuyManager.badGuys.forEach( (badGuy, badGuyIdx) => {
     //console.log('Cleanup is running with ' + badGuyManager.badGuys.length + ' Badguys')
     bulletManager.bullets.forEach((bullet, bulletIdx) => {
@@ -79,7 +80,7 @@ const cleanup = () => {
         bulletKB.direction = badGuy.posn.clone().sub(bullet.posn.clone()).normalize()
         bulletKB.queueMove(badGuy)
         if (bullet.name == "BasicFire") {
-          bulletManager.bullets.splice(bulletIdx)
+          bulletsToRemove.push(bulletIdx)
           badGuy.hp -= 1
         }
         if (badGuy.hp < 1) {
@@ -96,8 +97,11 @@ const cleanup = () => {
   })
   bulletManager.bullets.forEach((bullet, bulletIdx) => {
     if (isOob(bullet)) {
-      bulletManager.bullets.splice(bulletIdx, 1)
+      bulletsToRemove.push(bulletIdx)
     }
+  })
+  bulletsToRemove.forEach((bulletIdx) => {
+    bulletManager.bullets.splice(bulletIdx, 1)
   })
 }
 

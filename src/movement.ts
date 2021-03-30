@@ -1,7 +1,7 @@
 import { Vec2D } from "./vecs"
 import { Fighter, Bullet, circleMan, BadGuy } from "./circles"
 
-export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab'
+export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab' | 'reversePushObj'
 
 export type AutoMove = Move
 

@@ -92,7 +92,7 @@ export class BadGuyManager {
       new BadGuy(
         this.nextId,
         startPosn.clone(),
-        50,
+        48,
         0.125,
         7,
         new Move('notMoving', 10, 0, 0),
@@ -123,7 +123,7 @@ export class CircleMan implements Fighter {
 
 export let circleMan: CircleMan = new CircleMan(
   new Vec2D(100, 100),
-  50,
+  48,
   5,
   new Move('notMoving', 10, 0, 0),
   0.4,

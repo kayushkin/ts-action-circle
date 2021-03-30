@@ -61,7 +61,7 @@ export class Dash extends Skill {
   }
 
   onCast() {
-    let dash: Move = new Move('dash', 8, 0.5, 250)
+    let dash: Move = new Move('dash', 8, 0.8, 500)
     dash.direction = circleMan.movement.direction
     dash.queueMove(circleMan)
   }
@@ -75,7 +75,7 @@ export class Grab extends Skill {
   activatingCondition(): boolean { return !(null == mousedOverBadGuy()) }
   
   onCast() {
-    let grab: Move = new Move('grab', 2, 1.75, 5000)
+    let grab: Move = new Move('grab', 6, 1.75, 5000)
     if (mousedOverBadGuy()) {
       let badGuy = mousedOverBadGuy() as BadGuy  //fix this
       grab.direction = circleMan.posn.clone().sub(badGuy.posn.clone()).normalize()
