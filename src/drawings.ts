@@ -1,15 +1,22 @@
-import { circleMan, badGuyManager, bulletManager } from './graphics'
+import { currentMenu } from './index'
+import { currentLevel } from './menuUpdate'
 
 export let canvas = document.createElement('canvas')
 
 export let ctx = canvas.getContext('2d')!
 
 export var imgPath = './src/assets/placeholders/placeholder_tokens.png'
+export var buttonImgPath = './src/assets/placeholders/main_Menu_buttons_spritesheet.png'
 
 export var img = document.createElement('img') 
 img.style.display = "none"
 img.src = imgPath 
 document.body.appendChild(img)
+
+export var buttonImg = document.createElement('img') 
+buttonImg.style.display = "none"
+buttonImg.src = buttonImgPath 
+document.body.appendChild(buttonImg)
 
 export const setupCanvas = () => {
   document.body.parentElement!.style.height = '100%'
@@ -34,11 +41,11 @@ export const renderLevel = () => {
   ctx.fillStyle = 'gray' 
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  circleMan.draw(ctx, img)
-  badGuyManager.badGuys.forEach(badGuy => {
+  currentLevel.circleMan.draw(ctx, img)
+  currentLevel.badGuys.forEach(badGuy => {
     badGuy.drawBasic(ctx, img)
   })
-  bulletManager.bullets.forEach(bullet => {
+  currentLevel.bullets.forEach(bullet => {
     bullet.draw(ctx, img)
   })
 }
@@ -47,9 +54,11 @@ export const renderMenu = () => {
   ctx.fillStyle = 'gray' 
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+  currentMenu.buttons.forEach(button => {
+    button.draw(ctx, buttonImg)
+  })
   
-  ctx.fillStyle = 'red' 
-  ctx.fillRect(100, 100, canvas.width- 500, canvas.height - 500)
+  
   
   //TO DO: draw menu options
 }

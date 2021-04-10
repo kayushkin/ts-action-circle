@@ -1,18 +1,22 @@
 import { setupCanvas, renderLevel, renderMenu } from './drawings'
 import { Level } from "./levelUpdate"
+import { inLevel, currentLevel, Menu } from "./menuUpdate"
 
 setupCanvas()
 
 let lastFrame = Date.now()
-let inLevel: number = 0
-
-//menu choice
+export let currentMenu: Menu = new Menu()
 
 const loop = () => {
   window.requestAnimationFrame(loop)
   let time = Date.now()
-  update(time - lastFrame) // TODO delta
-  (inLevel != 0) ? renderLevel() : renderMenu()
+  if (inLevel){
+    currentLevel.update(time - lastFrame)
+    renderLevel()
+  } else {
+    currentMenu.setInLevel()
+    renderMenu()
+  }
   lastFrame = time
 }
 

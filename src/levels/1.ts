@@ -1,9 +1,10 @@
 import { Level } from '../levelUpdate'
-import { BadGuyManager, BulletManager, CircleMan } from '../graphics'
+import { badGuyManager, bulletManager, CircleMan } from '../graphics'
 import { Vec2D } from '../vecs'
 import { Move } from '../movement'
 
-export let badGuyManager: BadGuyManager = new BadGuyManager()
+badGuyManager.badGuys = []
+bulletManager.bullets = []
 
 badGuyManager.newBasic(new Vec2D(200,400))
 badGuyManager.newBasic(new Vec2D(400,200))
@@ -17,7 +18,7 @@ export let circleMan: CircleMan = new CircleMan(
     0.4,
   )
 
-export let bulletManager: BulletManager = new BulletManager()
+
 
 export let level1: Level = new Level(
     badGuyManager.badGuys, 

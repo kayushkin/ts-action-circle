@@ -1,7 +1,4 @@
 import { Vec2D } from './vecs'
-import { Skill } from './skills'
-import { CircleMan, circleMan } from './graphics'
-import { circleMan } from './levelUpdate'
 
 export type Actions = {
   up: boolean

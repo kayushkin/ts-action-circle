@@ -1,4 +1,5 @@
-import { Fighter, Posn, circleMan, bulletManager, badGuyManager, BadGuy } from './graphics'
+import { Fighter, bulletManager, BadGuy } from './graphics'
+import { currentLevel } from './menuUpdate'
 import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
 import { Move } from './movement'
@@ -12,6 +13,7 @@ export abstract class Skill {
   constructor(public name: skillName, public cd: number, public fighter: Fighter) {
     this.lastCast = 0
   }
+
 
   isOffCooldown(): boolean { return this.cd < Date.now() - this.lastCast }
 
@@ -37,9 +39,9 @@ export class BasicFire extends Skill {
 
   onCast() {
     let bulletMove: Move = new Move('basicFire', 10, 0.5, 10000)
-    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn).normalize()
+    let normalizedFiringVector = mousePosition.clone().sub(currentLevel.circleMan.posn).normalize()
     bulletMove.direction = normalizedFiringVector
-    bulletManager.newBasic(circleMan.posn.clone(), bulletMove)
+    bulletManager.newBasic(currentLevel.circleMan.posn.clone(), bulletMove)
   }
 }
 export class OrangeFire extends Skill {
@@ -49,9 +51,9 @@ export class OrangeFire extends Skill {
 
   onCast() {
     let orangeBulletMove: Move = new Move('orangeFire', 5, 0.4, 50000)
-    let normalizedFiringVector = mousePosition.clone().sub(circleMan.posn.clone()).normalize()
+    let normalizedFiringVector = mousePosition.clone().sub(currentLevel.circleMan.posn.clone()).normalize()
     orangeBulletMove.direction = normalizedFiringVector
-    bulletManager.newOrange(circleMan.posn.clone(), orangeBulletMove)
+    bulletManager.newOrange(currentLevel.circleMan.posn.clone(), orangeBulletMove)
   }
 }
 
@@ -62,8 +64,8 @@ export class Dash extends Skill {
 
   onCast() {
     let dash: Move = new Move('dash', 8, 0.8, 500)
-    dash.direction = circleMan.movement.direction
-    dash.queueMove(circleMan)
+    dash.direction = currentLevel.circleMan.movement.direction
+    dash.queueMove(currentLevel.circleMan)
   }
 }
 
@@ -78,7 +80,7 @@ export class Grab extends Skill {
     let grab: Move = new Move('grab', 6, 1.75, 5000)
     if (mousedOverBadGuy()) {
       let badGuy = mousedOverBadGuy() as BadGuy  //fix this
-      grab.direction = circleMan.posn.clone().sub(badGuy.posn.clone()).normalize()
+      grab.direction = currentLevel.circleMan.posn.clone().sub(badGuy.posn.clone()).normalize()
       grab.queueMove(badGuy)
     }
   }

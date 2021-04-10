@@ -2,6 +2,7 @@ import { Move, AutoMove } from "./movement"
 import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 import { mousePosition, Actions, actions } from './inputs'
+import { ctx } from "./drawings"
 
 export type Posn = Vec2D
 
@@ -19,7 +20,7 @@ export interface Drawable {
 }
 
 export class Button {
-  constructor(public posn: Posn){}
+  constructor(public name: string, public posn: Posn){}
   width: number = 192
   height: number = 32
 
@@ -38,6 +39,12 @@ export class Button {
   isUnclickedOn() {
     if(!actions.BasicFire && this.isHoveredOver()) {
       return true;
+    }
+  }
+  draw(ctx: CanvasRenderingContext2D, image: any) {
+    switch (this.name) {
+      case ('DungeonOne'):
+        ctx.drawImage(image, 0, 0, 192, 32, this.posn.x, this.posn.y, 192, 32)
     }
   }
 }
@@ -145,3 +152,7 @@ export class CircleMan implements Fighter {
     ctx.drawImage(image, 0, 0, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
   }
 }
+
+export let badGuyManager: BadGuyManager = new BadGuyManager()
+
+export let bulletManager: BulletManager = new BulletManager()
