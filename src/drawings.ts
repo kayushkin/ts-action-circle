@@ -1,4 +1,4 @@
-import { circleMan, badGuyManager, bulletManager } from './circles'
+import { circleMan, badGuyManager, bulletManager } from './graphics'
 
 export let canvas = document.createElement('canvas')
 
@@ -51,5 +51,5 @@ export const renderMenu = () => {
   ctx.fillStyle = 'red' 
   ctx.fillRect(100, 100, canvas.width- 500, canvas.height - 500)
   
-  //TODO: draw menu options
+  //TO DO: draw menu options
 }

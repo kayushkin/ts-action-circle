@@ -1,4 +1,4 @@
-import { Fighter, Posn, circleMan, bulletManager, badGuyManager, BadGuy } from './circles'
+import { Fighter, Posn, circleMan, bulletManager, badGuyManager, BadGuy } from './graphics'
 import { actions, mousePosition } from './inputs'
 import { mousedOverBadGuy } from './detection'
 import { Move } from './movement'
