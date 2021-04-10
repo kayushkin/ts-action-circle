@@ -1,5 +1,5 @@
 import { Vec2D } from "./vecs"
-import { Fighter, Bullet, circleMan, BadGuy } from "./circles"
+import { Fighter, Bullet, circleMan, BadGuy } from "./graphics"
 
 export type moveName = 'notMoving' | 'arrowKey' | 'basicFire' | 'pushObj' | 'bulletKB' | 'dash' | 'orangeFire' | 'grab' | 'reversePushObj'
 

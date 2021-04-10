@@ -1,4 +1,4 @@
-import { badGuyManager, Circle } from "./circles"
+import { badGuyManager, Circle } from "./graphics"
 import { Vec2D } from "./vecs"
 import { canvas } from "./drawings"
 import { mousePosition } from "./inputs"
