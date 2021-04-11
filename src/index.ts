@@ -15,6 +15,7 @@ const loop = () => {
     renderLevel()
   } else {
     currentMenu.setInLevel()
+    currentMenu.highlightHovered()
     renderMenu()
   }
   lastFrame = time

@@ -2,7 +2,7 @@ import { Move, AutoMove } from "./movement"
 import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 import { mousePosition, Actions, actions } from './inputs'
-import { ctx } from "./drawings"
+import { ctx, ImgInfo } from "./drawings"
 
 export type Posn = Vec2D
 
@@ -20,32 +20,32 @@ export interface Drawable {
 }
 
 export class Button {
-  constructor(public name: string, public posn: Posn){}
+  constructor(public buttonInfo: ImgInfo){}
   width: number = 192
   height: number = 32
+  hoveredOver: boolean = false
 
   isHoveredOver() {
-    if (mousePosition.x > this.posn.x && mousePosition.x < 192 + this.posn.x) {
-      if (mousePosition.y > this.posn.y && mousePosition.y < 32 + this.posn.y) {
-        return true
+    if (mousePosition.x > this.buttonInfo.canvasPosn.x && mousePosition.x < 192 + this.buttonInfo.canvasPosn.x) {
+      if (mousePosition.y > this.buttonInfo.canvasPosn.y && mousePosition.y < 32 + this.buttonInfo.canvasPosn.y) {
+        this.hoveredOver = true
       }
+    } else {
+      this.hoveredOver = false
     }
   }
   isClickedOn() {
-    if(actions.BasicFire && this.isHoveredOver()) {
+    if(actions.BasicFire && this.hoveredOver) {
       return true;
     }
   }
   isUnclickedOn() {
-    if(!actions.BasicFire && this.isHoveredOver()) {
+    if(!actions.BasicFire && this.hoveredOver) {
       return true;
     }
   }
   draw(ctx: CanvasRenderingContext2D, image: any) {
-    switch (this.name) {
-      case ('DungeonOne'):
-        ctx.drawImage(image, 0, 0, 192, 32, this.posn.x, this.posn.y, 192, 32)
-    }
+    ctx.drawImage(image, this.buttonInfo.Posn.x, this.buttonInfo.Posn.y, 192, 32, this.buttonInfo.canvasPosn.x, this.buttonInfo.canvasPosn.y, 192, 32)
   }
 }
 

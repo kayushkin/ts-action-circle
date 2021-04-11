@@ -1,14 +1,14 @@
 import { Vec2D } from './vecs'
 
 export type Actions = {
-  up: boolean
-  down: boolean
-  left: boolean
-  right: boolean
-  BasicFire: boolean
-  OrangeFire: boolean
-  Dash: boolean
-  Grab: boolean
+  up: boolean,
+  down: boolean,
+  left: boolean,
+  right: boolean,
+  BasicFire: boolean,
+  OrangeFire: boolean,
+  Dash: boolean,
+  Grab: boolean,
 }
 
 export let actions: Actions = {

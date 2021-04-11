@@ -1,5 +1,6 @@
 import { currentMenu } from './index'
 import { currentLevel } from './menuUpdate'
+import { Vec2D } from './vecs'
 
 export let canvas = document.createElement('canvas')
 
@@ -18,6 +19,25 @@ buttonImg.style.display = "none"
 buttonImg.src = buttonImgPath 
 document.body.appendChild(buttonImg)
 
+export type ImgInfo = {
+  name: string,
+  Posn: Vec2D,
+  canvasPosn: Vec2D,
+}
+
+export type ButtonImgInfo = {
+  dungeonOne: ImgInfo,
+  dungeonTwo: ImgInfo,
+  dungeonThree: ImgInfo,
+  dungeonOneHL: ImgInfo,
+  dungeonTwoHL: ImgInfo,
+  dungeonThreeHL: ImgInfo
+  options: ImgInfo,
+  optionsHL: ImgInfo,
+  quitGame: ImgInfo,
+  quitGameHL: ImgInfo,
+}
+
 export const setupCanvas = () => {
   document.body.parentElement!.style.height = '100%'
   document.body.style.height = '100%'
@@ -27,6 +47,59 @@ export const setupCanvas = () => {
   canvas.height = parseFloat(window.getComputedStyle(document.body).height)
   canvas.style.backgroundColor = 'gray'
   document.body.appendChild(canvas)
+}
+
+export let buttonImgInfo: ButtonImgInfo = {
+  dungeonOne: {
+    name: 'dungeonOne',
+    Posn: new Vec2D(0, 0),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,50),
+  },
+  dungeonTwo: {
+    name: 'dungeonTwo',
+    Posn: new Vec2D(0, 32),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,100),
+  },
+  dungeonThree: {
+    name: 'dungeonThree',
+    Posn: new Vec2D(0, 64),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,150),
+  },
+  dungeonOneHL: {
+    name: 'dungeonOneHL',
+    Posn: new Vec2D(192, 0),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,50),
+  },
+  dungeonTwoHL: {
+    name: 'dungeonTwoHL',
+    Posn: new Vec2D(192, 32),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,100),
+  },
+  dungeonThreeHL: {
+    name: 'dungeonThreeHL',
+    Posn: new Vec2D(192, 64),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 - 220,150),
+  },
+  options: {
+    name: 'options',
+    Posn: new Vec2D(0, 96),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 + 28,50),
+  },
+  optionsHL: {
+    name: 'optionsHL',
+    Posn: new Vec2D(192, 96),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 + 28,50),
+  },
+  quitGame: {
+    name: 'quitGame',
+    Posn: new Vec2D(0, 128),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 + 28,100),
+  },
+  quitGameHL: {
+    name: 'quitGameHL',
+    Posn: new Vec2D(192, 128),
+    canvasPosn: new Vec2D(parseFloat(window.getComputedStyle(document.body).width)/2 + 28,100),
+ },
 }
 
 //export const drawCircle = (circle: Circle) => {
@@ -46,13 +119,14 @@ export const renderLevel = () => {
     badGuy.drawBasic(ctx, img)
   })
   currentLevel.bullets.forEach(bullet => {
+    console.log(bullet)
     bullet.draw(ctx, img)
   })
 }
 
 export const renderMenu = () => {
   ctx.fillStyle = 'gray' 
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillRect(0, 0, canvas.width , canvas.height)
 
   currentMenu.buttons.forEach(button => {
     button.draw(ctx, buttonImg)
