@@ -20,37 +20,18 @@ export class Menu {
         this.name = 'startMenu'
         this.buttons = []
         this.buttons.push(
-            new Button(buttonImgInfo.dungeonOneHL),
-            new Button(buttonImgInfo.dungeonOne),
-            new Button(buttonImgInfo.dungeonTwoHL),
-            new Button(buttonImgInfo.dungeonTwo),
-            new Button(buttonImgInfo.dungeonThreeHL),
-            new Button(buttonImgInfo.dungeonThree),
-            new Button(buttonImgInfo.optionsHL),
-            new Button(buttonImgInfo.options),
-            new Button(buttonImgInfo.quitGameHL),
-            new Button(buttonImgInfo.quitGame),
+            new Button([buttonImgInfo.dungeonOne, buttonImgInfo.dungeonOneHL]),
+            new Button([buttonImgInfo.dungeonTwo, buttonImgInfo.dungeonTwoHL]),
+            new Button([buttonImgInfo.dungeonThree, buttonImgInfo.dungeonThreeHL]),
+            new Button([buttonImgInfo.options, buttonImgInfo.optionsHL]),
+            new Button([buttonImgInfo.quitGame, buttonImgInfo.quitGameHL]),
         )
     }
 
     highlightHovered() {
-        let buttonToHL: number = -1
-        this.buttons.forEach((button, idx) => {
-            button.isHoveredOver()
-            if (!button.buttonInfo.name.includes('HL')) {
-                if (button.hoveredOver && button.buttonInfo.canvasPosn.x > 0) {
-                     button.buttonInfo.canvasPosn.x -= 2000
-                     console.log("REMOVING 2000")
-                }
-            if (button.buttonInfo.canvasPosn.x < 0){
-                if (button.hoveredOver) {
-                } else {
-                    button.buttonInfo.canvasPosn.x += 2000}
-                    console.log("ADDING 2000")
-                }
-                console.log(button.buttonInfo)
-
-            }
+        this.buttons.forEach((buttonFrames, idx) => {
+            buttonFrames.isHoveredOver()
+            buttonFrames.hoveredOver ? buttonFrames.frame = 1 : buttonFrames.frame = 0
         })
     }
 

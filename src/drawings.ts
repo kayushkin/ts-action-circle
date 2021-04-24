@@ -38,6 +38,8 @@ export type ButtonImgInfo = {
   quitGameHL: ImgInfo,
 }
 
+export type ImageFrames = ImgInfo[]
+
 export const setupCanvas = () => {
   document.body.parentElement!.style.height = '100%'
   document.body.style.height = '100%'
@@ -129,7 +131,7 @@ export const renderMenu = () => {
   ctx.fillRect(0, 0, canvas.width , canvas.height)
 
   currentMenu.buttons.forEach(button => {
-    button.draw(ctx, buttonImg)
+    button.draw(ctx, buttonImg, 1)
   })
   
   

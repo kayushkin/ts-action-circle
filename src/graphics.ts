@@ -2,7 +2,7 @@ import { Move, AutoMove } from "./movement"
 import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 import { mousePosition, Actions, actions } from './inputs'
-import { ctx, ImgInfo } from "./drawings"
+import { ctx, ImgInfo, ImageFrames } from "./drawings"
 
 export type Posn = Vec2D
 
@@ -20,19 +20,16 @@ export interface Drawable {
 }
 
 export class Button {
-  constructor(public buttonInfo: ImgInfo){}
+  constructor(public buttonFrames: ImageFrames){}
   width: number = 192
   height: number = 32
   hoveredOver: boolean = false
+  frame: number = 0
 
   isHoveredOver() {
-    if (mousePosition.x > this.buttonInfo.canvasPosn.x && mousePosition.x < 192 + this.buttonInfo.canvasPosn.x) {
-      if (mousePosition.y > this.buttonInfo.canvasPosn.y && mousePosition.y < 32 + this.buttonInfo.canvasPosn.y) {
-        this.hoveredOver = true
-      }
-    } else {
-      this.hoveredOver = false
-    }
+    let mouseWithinX: Boolean = mousePosition.x > this.buttonFrames[this.frame].canvasPosn.x && mousePosition.x < 192 + this.buttonFrames[this.frame].canvasPosn.x;
+    let mouseWithinY: Boolean = mousePosition.y > this.buttonFrames[this.frame].canvasPosn.y && mousePosition.y < 32 + this.buttonFrames[this.frame].canvasPosn.y;
+    (mouseWithinX && mouseWithinY) ? this.hoveredOver = true : this.hoveredOver = false
   }
   isClickedOn() {
     if(actions.BasicFire && this.hoveredOver) {
@@ -44,8 +41,8 @@ export class Button {
       return true;
     }
   }
-  draw(ctx: CanvasRenderingContext2D, image: any) {
-    ctx.drawImage(image, this.buttonInfo.Posn.x, this.buttonInfo.Posn.y, 192, 32, this.buttonInfo.canvasPosn.x, this.buttonInfo.canvasPosn.y, 192, 32)
+  draw(ctx: CanvasRenderingContext2D, image: any, frame: number) {
+    ctx.drawImage(image, this.buttonFrames[this.frame].Posn.x, this.buttonFrames[this.frame].Posn.y, 192, 32, this.buttonFrames[this.frame].canvasPosn.x, this.buttonFrames[0].canvasPosn.y, 192, 32)
   }
 }
 
