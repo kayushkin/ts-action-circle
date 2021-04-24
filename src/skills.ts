@@ -63,7 +63,7 @@ export class Dash extends Skill {
   }
 
   onCast() {
-    let dash: Move = new Move('dash', 8, 0.8, 500)
+    let dash: Move = new Move('dash', 8, 0.9, 300)
     dash.direction = currentLevel.circleMan.movement.direction
     dash.queueMove(currentLevel.circleMan)
   }
