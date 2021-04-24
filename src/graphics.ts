@@ -2,7 +2,7 @@ import { Move, AutoMove } from "./movement"
 import { BasicFire, Dash, Grab, OrangeFire, Skill } from "./skills"
 import { Vec2D } from './vecs'
 import { mousePosition, Actions, actions } from './inputs'
-import { ctx, ImgInfo, ImageFrames } from "./drawings"
+import { ctx, ImgInfo, ImageFrames,  } from "./drawings"
 
 export type Posn = Vec2D
 
@@ -57,10 +57,12 @@ export class Bullet implements Circle {
   draw(ctx: CanvasRenderingContext2D, image: any) {
     switch (this.name) {
       case ('BasicFire'):
-        ctx.drawImage(image, 208, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+        ctx.drawImage(image, 208, 64, 18, 18, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 18, 18)
         break
       case ('OrangeFire'):
-        ctx.drawImage(image, 190, 64, 96, 96, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 96, 96)
+        let spriteCoords: Vec2D = new Vec2D(0 ,0);
+        (Date.now() % 2) ? spriteCoords = new Vec2D(190, 64) : spriteCoords = new Vec2D(208, 64)
+        ctx.drawImage(image, spriteCoords.x , spriteCoords.y, 18, 18, (this.posn.x-(this.radius)), (this.posn.y-(this.radius)), 18, 18)
         break        
     }
   }

@@ -38,6 +38,8 @@ export type ButtonImgInfo = {
   quitGameHL: ImgInfo,
 }
 
+
+
 export type ImageFrames = ImgInfo[]
 
 export const setupCanvas = () => {
@@ -104,6 +106,19 @@ export let buttonImgInfo: ButtonImgInfo = {
  },
 }
 
+export let orangeFireImgInfo: ImgInfo[] = [
+  {
+    name: 'blue',
+    Posn: new Vec2D(190, 64),
+    canvasPosn: new Vec2D(0, 0),
+  },
+  {
+    name: 'orange',
+    Posn: new Vec2D(198, 64),
+    canvasPosn: new Vec2D(0, 0),
+  },
+]
+
 //export const drawCircle = (circle: Circle) => {
 //  ctx.beginPath()
 //  ctx.arc(circle.posn.x, circle.posn.y, circle.radius, 0, 2 * Math.PI)
@@ -121,7 +136,6 @@ export const renderLevel = () => {
     badGuy.drawBasic(ctx, img)
   })
   currentLevel.bullets.forEach(bullet => {
-    console.log(bullet)
     bullet.draw(ctx, img)
   })
 }
