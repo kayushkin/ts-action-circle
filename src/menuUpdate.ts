@@ -1,5 +1,4 @@
 import { Button, CircleMan } from "./graphics"
-import { Vec2D } from "./vecs"
 import { Level } from "./levelUpdate"
 import { circleMan } from "./levels/1"
 import { badGuyManager, bulletManager } from './graphics'
